@@ -1325,6 +1325,7 @@
   document.documentElement.setAttribute("data-theme", "light");
 
   document.getElementById("downloadReportBtn").addEventListener("click", function () {
+    track("report_downloaded");
     window.print();
   });
 
@@ -1809,6 +1810,7 @@
   }
 
   function finishSurvey() {
+    track("survey_completed");
     document.getElementById("surveyRoot").classList.add("hidden");
     var dash = document.getElementById("dashboardRoot");
     dash.classList.remove("hidden");
@@ -1816,6 +1818,7 @@
     requestAnimationFrame(function () { dash.classList.add("show"); });
   }
 
+  track("page_view", getUtmParams());
   renderSurveySlide();
 })();
 </script>
