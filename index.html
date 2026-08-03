@@ -110,7 +110,7 @@
   .theme-toggle {
     border: 1px solid var(--hairline); background: var(--card); color: var(--ink-soft);
     border-radius: 7px; padding: 6px 11px; font-size: 12.5px; cursor: pointer; font-family: var(--font-body);
-    white-space: nowrap;
+    white-space: nowrap; display: inline-flex; align-items: center; gap: 5px;
   }
   .theme-toggle:hover { color: var(--ink); border-color: var(--muted); }
   .theme-toggle:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible {
@@ -425,6 +425,10 @@
   .survey-input-row input:focus { outline: none; }
   .survey-input-row input::placeholder { color: #8A7F68; opacity: 0.6; }
   .survey-unit { font-size: 15px; color: #8A7F68; white-space: nowrap; }
+  .survey-unit.highlight {
+    color: #144474; font-weight: 700; background: #D7D5EB;
+    padding: 4px 11px; border-radius: 999px; font-size: 14px;
+  }
   .survey-note { font-size: 13px; color: #8A7F68; margin: 0 0 26px; font-variant-numeric: tabular-nums; line-height: 1.5; transition: color 0.15s ease; }
   .survey-note-confirm { color: #144474; font-weight: 600; }
   .survey-input-row input:disabled { opacity: 1; color: inherit; -webkit-text-fill-color: #144474; }
@@ -507,12 +511,18 @@
 <div class="wrap hidden" id="dashboardRoot">
   <header class="masthead">
     <div>
-      <h1>Should I Buy or Rent in the Netherlands? 🇳🇱</h1>
+      <h1>BUY or RENT 🇳🇱</h1>
       <p>A wealth-based comparison: cash actually spent minus what you get back at the end, over your chosen holding period.</p>
     </div>
     <div class="masthead-actions">
-      <button class="theme-toggle" id="downloadReportBtn" type="button">Download report (PDF)</button>
-      <button class="theme-toggle" id="redoSurveyBtn" type="button">Redo the survey</button>
+      <button class="theme-toggle" id="downloadReportBtn" type="button">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 3v12m0 0-4-4m4 4 4-4M5 19h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Export report (PDF)
+      </button>
+      <button class="theme-toggle" id="redoSurveyBtn" type="button">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 12a8 8 0 1 1-2.34-5.66M20 4v5h-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Redo the survey
+      </button>
     </div>
   </header>
 
@@ -552,7 +562,7 @@
   var state = {
     price: null,
     downPayment: 0,
-    mortgageRatePct: 4.1,
+    mortgageRatePct: 4.2,
     loanTermYears: 30,
     holdingYears: 6,
     monthlyRent: 2900,
@@ -576,7 +586,7 @@
     maintenancePct: 1,
     groundLease: 0,
 
-    houseGrowthPct: 2,
+    houseGrowthPct: 2.5,
     rentGrowthPct: 2.5,
     holdingCostInflationPct: 2,
     investmentReturnPct: 5,
@@ -769,7 +779,8 @@
     { key: "maintenancePct", label: "Maintenance budget", unit: "% of price/yr", step: 0.1, group: "holding" },
     { key: "groundLease", label: "Ground lease (erfpacht)", unit: "€/mo", step: 10, group: "holding" },
 
-    { key: "houseGrowthPct", label: "House price growth", unit: "%/yr", step: 0.1, group: "growth" },
+    { key: "houseGrowthPct", label: "House price growth", unit: "%/yr", step: 0.1, group: "growth",
+      caption: "Based on 2026 outlooks from ABN AMRO, Rabobank, and ING (roughly 1.5–3.1%/yr) — a rough middle estimate." },
     { key: "investmentReturnPct", label: "Investment return (alt. use of capital)", unit: "%/yr", step: 0.1, group: "growth" }
   ];
 
@@ -1168,8 +1179,12 @@
       '</div>';
   }
 
+  function holdingChartSeries(model) {
+    return model.holdingSeries.slice(0, model.holdingYears + 5);
+  }
+
   function holdingPeriodTable(model) {
-    var rows = model.holdingSeries.map(function (y) {
+    var rows = holdingChartSeries(model).map(function (y) {
       var vs = y.netCostBuy < y.netCostRent ? "Buy cheaper by " + fmtEUR(y.netCostRent - y.netCostBuy)
         : (y.netCostBuy > y.netCostRent ? "Rent cheaper by " + fmtEUR(y.netCostBuy - y.netCostRent) : "Equal");
       return '<tr><td>Year ' + y.year + (y.year === model.holdingYears ? ' (your plan)' : '') + '</td><td>' + fmtEUR(y.netCostBuy) + '</td><td>' + fmtEUR(y.netCostRent) + '</td><td>' + vs + '</td></tr>';
@@ -1256,7 +1271,7 @@
 
   function drawHoldingPeriodChart(model) {
     var svg = document.getElementById("chartHolding");
-    var series = model.holdingSeries;
+    var series = holdingChartSeries(model);
     var maxVal = niceMax(Math.max.apply(null, series.map(function (y) { return Math.max(y.netCostBuy, y.netCostRent); })) * 1.12);
     var innerW = VB_W - PAD.l - PAD.r, innerH = VB_H - PAD.t - PAD.b;
     var n = series.length;
@@ -1606,8 +1621,8 @@
       prompt: "How much would you like to budget for furniture & interior setup?",
       placeholder: "e.g. 5.000", default: 5000,
       skipNote: "We'll suggest a typical €5.000 furniture budget — you can adjust it anytime." },
-    { type: "number", key: "investmentReturnPct", unit: "% / year",
-      prompt: "If you didn't buy, you'd keep your down payment invested and bank the monthly difference between rent and a mortgage payment. What annual return would that money earn?",
+    { type: "number", key: "investmentReturnPct", unit: "% / year", highlightUnit: true,
+      prompt: "Instead of buying, you'd invest your down payment and monthly savings. What annual return do you expect?",
       placeholder: "e.g. 5",
       default: 5,
       skipNote: "We'll assume a 5%/year return, a common long-term benchmark for a diversified investment portfolio — you can change it anytime." },
@@ -1713,7 +1728,7 @@
     return '<h1 class="survey-h">' + esc(slide.prompt) + '</h1>' +
       '<div class="survey-input-row">' +
         '<input type="number" id="surveyInput" class="' + noSpinClass.trim() + '" placeholder="' + esc(placeholderText) + '"' + valueAttr + ' autocomplete="off">' +
-        '<span class="survey-unit">' + esc(slide.unit) + '</span>' +
+        '<span class="survey-unit' + (slide.highlightUnit ? ' highlight' : '') + '">' + esc(slide.unit) + '</span>' +
       '</div>' +
       extra +
       '<p class="survey-note" id="surveyNote">' + esc(resolveSkipNote(slide)) + '</p>' +
