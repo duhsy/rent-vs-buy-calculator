@@ -1,3 +1,6 @@
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Should I Buy or Rent in the Netherlands? 🇳🇱</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+CjxyZWN0IHdpZHRoPSI2NCIgaGVpZ2h0PSI2NCIgcng9IjE0IiBmaWxsPSIjRjdGNEVFIi8+CjxwYXRoIGQ9Ik0zMiA4IEw1NCAyOCBINTAgVjU0IEgxNCBWMjggSDEwIFoiIGZpbGw9IiMxNDQ0NzQiLz4KPHJlY3QgeD0iMjciIHk9IjM4IiB3aWR0aD0iMTAiIGhlaWdodD0iMTYiIGZpbGw9IiNCRTQ3MzciLz4KPC9zdmc+">
 <style>
@@ -93,10 +96,16 @@
   }
 
   .wrap { max-width: 1180px; margin: 0 auto; padding: 28px 20px 80px; }
+  @media (max-width: 560px) { .wrap { padding: 18px 14px 60px; } }
 
   header.masthead {
     display: flex; align-items: baseline; justify-content: space-between; gap: 16px;
     padding-bottom: 16px; margin-bottom: 24px; border-bottom: 3px solid var(--rule);
+  }
+  @media (max-width: 560px) {
+    header.masthead { flex-direction: column; align-items: stretch; }
+    .masthead-actions { flex-wrap: wrap; }
+    .masthead-actions .theme-toggle { flex: 1; justify-content: center; }
   }
   header.masthead h1 {
     font-family: var(--font-display);
@@ -118,6 +127,7 @@
   }
 
   .layout { display: grid; grid-template-columns: minmax(300px, 400px) 1fr; gap: 24px; align-items: start; }
+  .layout > * { min-width: 0; }
   @media (max-width: 940px) { .layout { grid-template-columns: 1fr; } }
 
   .panel-sticky { position: sticky; top: 20px; }
@@ -130,15 +140,16 @@
     padding: 4px 0; box-shadow: var(--shadow);
     max-height: calc(100vh - 40px); overflow-y: auto;
   }
+  @media (max-width: 940px) { .input-card { max-height: none; overflow-y: visible; } }
   .input-group { padding: 18px 20px; border-bottom: 8px solid var(--bg); }
   .input-group:last-child { border-bottom: none; }
   .input-group > .group-title {
     font-family: var(--font-display); font-weight: 700; font-size: 17px; letter-spacing: 0.01em;
     display: flex; align-items: center; gap: 8px; list-style: none;
   }
-  .group-body { padding-top: 12px; display: flex; flex-direction: column; gap: 12px; }
+  .group-body { padding-top: 12px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
 
-  .field { display: flex; flex-direction: column; gap: 4px; }
+  .field { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
   .field label { font-size: 12.5px; color: var(--ink-soft); display: flex; justify-content: space-between; gap: 8px; }
   .field label .label-text { display: inline-flex; align-items: center; gap: 5px; }
   .field label .unit { color: var(--muted); font-weight: 400; }
@@ -158,17 +169,22 @@
   .info-tooltip.show { opacity: 1; pointer-events: auto; }
   .field-caption { font-size: 11px; color: var(--muted); margin: 0; line-height: 1.4; }
   input[type="number"]::placeholder { color: var(--muted); }
-  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; min-width: 0; }
+  @media (max-width: 380px) { .field-row { grid-template-columns: 1fr; } }
   .input-with-toggle { display: flex; gap: 6px; }
   .input-with-toggle input { flex: 1; }
   .input-with-toggle select { width: 64px; flex: none; padding-left: 6px; padding-right: 4px; }
   input[type="number"], input[type="email"], select {
     font-family: var(--font-data); font-size: 14px; color: var(--ink);
     background: var(--card-alt); border: 1px solid var(--hairline); border-radius: 6px;
-    padding: 7px 9px; width: 100%; font-variant-numeric: tabular-nums;
+    padding: 7px 9px; width: 100%; min-width: 0; font-variant-numeric: tabular-nums;
   }
   input[type="email"] { font-family: var(--font-body); }
   select { font-family: var(--font-body); }
+  /* iOS Safari auto-zooms on focus for inputs under 16px -- bump on mobile */
+  @media (max-width: 940px) {
+    input[type="number"], input[type="email"], select { font-size: 16px; }
+  }
   input[type="number"]::-webkit-inner-spin-button { opacity: 0.5; }
   .survey-input-row input.no-spin::-webkit-inner-spin-button,
   .survey-input-row input.no-spin::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
@@ -268,7 +284,7 @@
   .swatch.line { border-radius: 0; height: 2px; width: 14px; }
   .swatch.dashed { border-radius: 0; height: 0; width: 14px; border-top: 2px dashed var(--rent); }
 
-  svg.chart { width: 100%; height: auto; display: block; overflow: visible; font-family: var(--font-data); }
+  svg.chart { width: 100%; min-width: 480px; height: auto; display: block; overflow: visible; font-family: var(--font-data); }
   svg.chart text { fill: var(--muted); font-size: 10.5px; }
   svg.chart .axis-line { stroke: var(--hairline); }
   svg.chart .gridline { stroke: var(--hairline); stroke-width: 1; }
@@ -292,7 +308,7 @@
   }
   .tooltip .t-row { display: flex; justify-content: space-between; gap: 10px; }
   .tooltip .t-num { font-family: var(--font-data); font-variant-numeric: tabular-nums; }
-  .chart-wrap { position: relative; }
+  .chart-wrap { position: relative; overflow-x: auto; }
 
   details.table-toggle summary {
     cursor: pointer; font-size: 12.5px; color: var(--ink-soft); list-style: none; margin-bottom: 8px;
@@ -363,6 +379,7 @@
     background: var(--card); border-radius: 12px; padding: 30px; max-width: 420px; width: 100%;
     box-shadow: var(--shadow); position: relative; max-height: 90vh; overflow-y: auto;
   }
+  @media (max-width: 420px) { .modal-box { padding: 22px 18px; } }
   .modal-close {
     position: absolute; top: 12px; right: 12px; background: none; border: none;
     font-size: 22px; line-height: 1; color: var(--muted); cursor: pointer; padding: 6px;
@@ -393,6 +410,7 @@
   .survey-progress-track { position: fixed; top: 0; left: 0; right: 0; height: 3px; background: #DED2B8; z-index: 101; }
   .survey-progress-bar { height: 100%; width: 0%; background: #144474; transition: width 0.35s ease; }
   .survey-body { flex: 1; display: flex; align-items: center; justify-content: center; padding: 70px 24px; }
+  @media (max-width: 560px) { .survey-body { padding: 56px 18px 30px; } }
   #surveySlide {
     max-width: 640px; width: 100%; position: relative;
     opacity: 0; transform: translateY(10px); transition: opacity 0.35s ease, transform 0.35s ease;
@@ -432,7 +450,7 @@
   .survey-note { font-size: 13px; color: #8A7F68; margin: 0 0 26px; font-variant-numeric: tabular-nums; line-height: 1.5; transition: color 0.15s ease; }
   .survey-note-confirm { color: #144474; font-weight: 600; }
   .survey-input-row input:disabled { opacity: 1; color: inherit; -webkit-text-fill-color: #144474; }
-  .survey-actions { display: flex; align-items: center; gap: 22px; margin-top: 4px; }
+  .survey-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 22px; margin-top: 4px; }
   .survey-btn {
     background: #144474; color: #fff; border: none; border-radius: 8px; padding: 13px 26px;
     font-size: 15px; font-weight: 600; cursor: pointer; font-family: var(--font-body);
