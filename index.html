@@ -188,12 +188,6 @@
   .verdict h2 {
     font-family: var(--font-display); font-size: 24px; margin: 0 0 6px; line-height: 1.25; text-wrap: balance;
   }
-  .verdict-scenarios { display: flex; flex-direction: column; gap: 7px; margin: 6px 0 16px; }
-  .verdict-line { font-size: 15px; color: var(--ink); margin: 0; }
-  .verdict-line .verdict-pct {
-    font-family: var(--font-data); font-weight: 600; color: var(--ink-soft); display: inline-block; min-width: 48px;
-  }
-  .verdict-line strong { font-variant-numeric: tabular-nums; }
   .verdict .sub { font-size: 13.5px; color: var(--ink-soft); margin: 0; }
   .verdict .sub strong { font-variant-numeric: tabular-nums; color: var(--ink); }
 
@@ -209,18 +203,36 @@
   .insight-text strong { color: var(--buy); font-variant-numeric: tabular-nums; }
 
   /* KPI cards grouped by Buying / Renting */
-  .kpi-groups { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 22px; }
+  .kpi-groups { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
   @media (max-width: 720px) { .kpi-groups { grid-template-columns: 1fr; } }
-  .kpi-group { border-radius: 12px; padding: 16px; border: 1px solid var(--hairline); }
-  .kpi-group-buy { background: var(--buy-tint); border-color: var(--buy-tint-strong); }
-  .kpi-group-rent { background: var(--rent-tint); border-color: var(--rent-tint-strong); }
+  .kpi-group {
+    background: var(--card); border-radius: 12px; padding: 18px 16px 16px;
+    border: 1px solid var(--hairline); border-top: 3px solid transparent; box-shadow: var(--shadow);
+  }
+  .kpi-group-buy { border-top-color: var(--buy); }
+  .kpi-group-rent { border-top-color: var(--rent); }
+  .kpi-group.is-winner { border-color: currentColor; }
   .kpi-group-title {
-    font-family: var(--font-display); font-size: 15px; font-weight: 700; margin: 0 0 12px;
-    display: flex; align-items: center; gap: 7px;
+    font-family: var(--font-display); font-size: 21px; font-weight: 700; margin: 0 0 14px;
+    display: flex; align-items: center; flex-wrap: wrap; gap: 8px;
   }
   .kpi-group-buy .kpi-group-title { color: var(--buy); }
   .kpi-group-rent .kpi-group-title { color: var(--rent); }
-  .kpi-group-title .dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; background: currentColor; }
+  .kpi-group-title .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; background: currentColor; }
+  .winner-badge {
+    font-family: var(--font-body); font-size: 12px; font-weight: 600; letter-spacing: 0.01em;
+    border-radius: 999px; padding: 3px 11px 3px 9px; display: inline-flex; align-items: center; gap: 4px;
+    white-space: nowrap;
+  }
+  .kpi-group-buy .winner-badge { background: var(--buy-tint); color: var(--buy); }
+  .kpi-group-rent .winner-badge { background: var(--rent-tint); color: var(--rent); }
+  @media (prefers-reduced-motion: no-preference) {
+    .winner-badge { animation: winnerPop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1); }
+  }
+  @keyframes winnerPop { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+  .tie-note {
+    text-align: center; font-size: 13px; color: var(--ink-soft); margin: -8px 0 20px;
+  }
   .kpi-group-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   @media (max-width: 460px) { .kpi-group-grid { grid-template-columns: 1fr; } }
   .kpi {
@@ -500,7 +512,6 @@
     <div class="masthead-actions">
       <button class="theme-toggle" id="downloadReportBtn" type="button">Download report (PDF)</button>
       <button class="theme-toggle" id="redoSurveyBtn" type="button">Redo the survey</button>
-      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle color theme">Theme: Auto</button>
     </div>
   </header>
 
@@ -727,14 +738,16 @@
   // INPUT PANEL — build once, wire events
   // ---------------------------------------------------------------------
   var FIELD_DEFS = [
-    { key: "price", label: "House purchase price", unit: "€", step: 5000, group: "core_a", placeholder: "e.g. 450000" },
+    { key: "price", label: "House purchase price", unit: "€", step: 5000, group: "core_a", placeholder: "e.g. 450.000" },
     { key: "mortgageRatePct", label: "Mortgage interest rate", unit: "%/yr", step: 0.05, group: "core_b",
       caption: "Netherlands average, 10-year fixed rate (Aug 2026). Varies by lender, NHG eligibility, and energy label." },
     { key: "loanTermYears", label: "Loan term", unit: "years", step: 1, group: "core_b" },
     { key: "holdingYears", label: "Holding period", unit: "years", step: 1, group: "core_b",
       infoCaption: "How many years do you expect to own this property before selling?" },
+    { key: "holdingCostInflationPct", label: "Holding cost inflation", unit: "%/yr", step: 0.1, group: "core_b" },
     { key: "monthlyRent", label: "Equivalent monthly rent", unit: "€/mo", step: 50, group: "core2" },
     { key: "occupants", label: "Number of occupants", unit: "", step: 1, group: "core2" },
+    { key: "rentGrowthPct", label: "Rent growth", unit: "%/yr", step: 0.1, group: "core2" },
 
     { key: "notaryTransfer", label: "Notary — transfer deed", unit: "€", step: 50, group: "onetime",
       caption: "Mandatory — Dutch law requires a notary to execute every property transfer." },
@@ -746,6 +759,7 @@
       caption: "Mandatory — lenders require an independent (NWWI-validated) valuation report before approving a mortgage." },
     { key: "furniture", label: "Furniture & interior setup", unit: "€", step: 100, group: "onetime",
       caption: "Optional — a personal budget, not a real-estate transaction cost." },
+    { key: "sellingCostPct", label: "Selling cost", unit: "% of sale price", step: 0.1, group: "onetime" },
 
     { key: "ozbAnnual", label: "Annual property tax", unit: "€/yr", step: 10, group: "holding",
       caption: "WOZ value × tax rate — a rough estimate; check your municipality's actual WOZ assessment for the exact amount." },
@@ -755,10 +769,7 @@
     { key: "groundLease", label: "Ground lease (erfpacht)", unit: "€/mo", step: 10, group: "holding" },
 
     { key: "houseGrowthPct", label: "House price growth", unit: "%/yr", step: 0.1, group: "growth" },
-    { key: "rentGrowthPct", label: "Rent growth", unit: "%/yr", step: 0.1, group: "growth" },
-    { key: "holdingCostInflationPct", label: "Holding cost inflation", unit: "%/yr", step: 0.1, group: "growth" },
-    { key: "investmentReturnPct", label: "Investment return (alt. use of capital)", unit: "%/yr", step: 0.1, group: "growth" },
-    { key: "sellingCostPct", label: "Selling cost", unit: "% of sale price", step: 0.1, group: "growth" }
+    { key: "investmentReturnPct", label: "Investment return (alt. use of capital)", unit: "%/yr", step: 0.1, group: "growth" }
   ];
 
   function fieldHTML(def) {
@@ -817,7 +828,7 @@
     return '<div class="field">' +
       '<label for="f_transferTaxMode">Transfer tax (overdrachtsbelasting)</label>' +
       '<select id="f_transferTaxMode">' +
-        '<option value="0"' + (mode === "0" ? " selected" : "") + '>0% — Starters exemption (age 18–35, one-time, price ≤ €555,000)</option>' +
+        '<option value="0"' + (mode === "0" ? " selected" : "") + '>0% — Starters exemption (age 18–35, one-time, price ≤ €555.000)</option>' +
         '<option value="2"' + (mode === "2" ? " selected" : "") + '>2% — Standard rate, primary residence</option>' +
         '<option value="8"' + (mode === "8" ? " selected" : "") + '>8% — Second home, buy-to-let, or investment property</option>' +
         '<option value="custom"' + (mode === "custom" ? " selected" : "") + '>Custom %</option>' +
@@ -840,7 +851,7 @@
         '<div class="field"><label for="f_agentFeeEUR">&nbsp;<span class="unit">€</span></label><input type="number" id="f_agentFeeEUR" step="100" value="' + state.agentFee + '"></div>' +
         '<div class="field"><label for="f_agentFeePct">&nbsp;<span class="unit">% of price</span></label><input type="number" id="f_agentFeePct" step="0.1" value="' + (Math.round(pct * 10) / 10) + '"></div>' +
       '</div>' +
-      '<p class="field-caption">Optional — courtage is typically 0.5–1.5% of price, or a fixed fee around €2,500–€5,000. The € and % fields stay in sync.</p>' +
+      '<p class="field-caption">Optional — courtage is typically 0.5–1.5% of price, or a fixed fee around €2.500–€5.000. The € and % fields stay in sync.</p>' +
       '</div>';
   }
 
@@ -870,7 +881,12 @@
       '</div>';
 
     html += '<div class="input-group">' +
-      '<div class="group-title">One-time buying costs</div>' +
+      '<div class="group-title">Growth &amp; investment assumptions</div>' +
+      '<div class="group-body">' + fieldsFor("growth") + '</div>' +
+      '</div>';
+
+    html += '<div class="input-group">' +
+      '<div class="group-title">One-time buying &amp; selling costs</div>' +
       '<div class="group-body">' +
         transferTaxFieldHTML() +
         fieldHTMLByKey("notaryTransfer") +
@@ -880,6 +896,7 @@
         surveyFieldHTML() +
         fieldHTMLByKey("valuation") +
         fieldHTMLByKey("furniture") +
+        fieldHTMLByKey("sellingCostPct") +
         '<div class="computed-note" id="note_onetime"></div>' +
       '</div>' +
       '</div>';
@@ -890,11 +907,6 @@
       fieldsFor("holding") +
       '<div class="computed-note" id="note_holding"></div>' +
       '</div></div>';
-
-    html += '<div class="input-group">' +
-      '<div class="group-title">Growth &amp; investment assumptions</div>' +
-      '<div class="group-body">' + fieldsFor("growth") + '</div>' +
-      '</div>';
 
     html += '<div class="input-group">' +
       '<div class="group-title">Tax treatment (NL mortgage interest deduction)</div>' +
@@ -1014,34 +1026,17 @@
   // ---------------------------------------------------------------------
   // RESULTS RENDER
   // ---------------------------------------------------------------------
-  function verdictScenarioLines(model) {
-    // Downturn / Flat / Strong growth — a deliberately small, low/mid/high
-    // spread rather than one single number presented as certain.
-    var picks = [model.scenarioResults[0], model.scenarioResults[1], model.scenarioResults[4]];
-    return picks.map(function (sc) {
-      var diff = sc.netCostBuy - sc.netCostRent;
-      var verdict = diff < -250
-        ? "<strong>BUY</strong> is more cost-effective by " + fmtEUR(-diff)
-        : diff > 250
-          ? "<strong>RENT</strong> is more cost-effective by " + fmtEUR(diff)
-          : "the two are roughly <strong>even</strong>";
-      return '<p class="verdict-line"><span class="verdict-pct">' + (sc.pct >= 0 ? "+" : "") + sc.pct + '%</span> growth: ' + verdict + '</p>';
-    }).join("");
-  }
-
   function renderResults(model) {
     var html = '';
-    html += '<div class="verdict">' +
-      '<p class="eyebrow">Verdict · over ' + state.holdingYears + ' year' + (state.holdingYears === 1 ? '' : 's') + ', by price-growth scenario</p>' +
-      '<div class="verdict-scenarios">' + verdictScenarioLines(model) + '</div>' +
-      '<p class="sub">Average monthly cost — Buying <strong>' + fmtEUR(model.avgMonthlyBuy) + '</strong> · Renting <strong>' + fmtEUR(model.avgMonthlyRent) + '</strong></p>' +
-      '</div>';
-
-    html += insightsHTML(model);
+    var diff = model.netCostBuy - model.netCostRent;
+    var buyWins = diff < -250;
+    var rentWins = diff > 250;
+    var buyBadge = buyWins ? ' <span class="winner-badge">🏆 Wins by ' + fmtEUR(-diff) + '</span>' : '';
+    var rentBadge = rentWins ? ' <span class="winner-badge">🏆 Wins by ' + fmtEUR(diff) + '</span>' : '';
 
     html += '<div class="kpi-groups">' +
-      '<div class="kpi-group kpi-group-buy">' +
-        '<p class="kpi-group-title"><span class="dot"></span>Buying</p>' +
+      '<div class="kpi-group kpi-group-buy' + (buyWins ? ' is-winner' : '') + '">' +
+        '<p class="kpi-group-title"><span class="dot"></span>Buying' + buyBadge + '</p>' +
         '<div class="kpi-group-grid">' +
           kpi("", "Net cost", fmtEUR(model.netCostBuy), "Total cash spent minus recoverable amount if sold") +
           kpi("", "Loan amount", fmtEUR(model.loanAmount), "Purchase price minus down payment", true) +
@@ -1050,14 +1045,21 @@
           kpi("", "Average monthly ownership cost", fmtEUR(model.avgMonthlyBuy), "Net cost spread across the ownership period for easier comparison", true) +
         '</div>' +
       '</div>' +
-      '<div class="kpi-group kpi-group-rent">' +
-        '<p class="kpi-group-title"><span class="dot"></span>Renting</p>' +
+      '<div class="kpi-group kpi-group-rent' + (rentWins ? ' is-winner' : '') + '">' +
+        '<p class="kpi-group-title"><span class="dot"></span>Renting' + rentBadge + '</p>' +
         '<div class="kpi-group-grid">' +
           kpi("", "Net cost", fmtEUR(model.netCostRent), "Total rent paid minus investment gain on unspent capital") +
           kpi("", "Avg. monthly cost", fmtEUR(model.avgMonthlyRent), null, true) +
         '</div>' +
       '</div>' +
       '</div>';
+
+    if (!buyWins && !rentWins) {
+      html += '<p class="tie-note">Roughly even over ' + state.holdingYears + ' year' + (state.holdingYears === 1 ? '' : 's') +
+        ' at current assumptions — within ' + fmtEUR(250) + ' of each other.</p>';
+    }
+
+    html += insightsHTML(model);
 
     html += chartCardScenario(model);
     html += chartCardHoldingPeriod(model);
@@ -1317,19 +1319,9 @@
   }
 
   // ---------------------------------------------------------------------
-  // THEME TOGGLE
+  // THEME — fixed to light; no user-facing toggle
   // ---------------------------------------------------------------------
-  var themeBtn = document.getElementById("themeToggle");
-  var themeOrder = ["light", "dark", "auto"];
-  var themeIdx = 0;
   document.documentElement.setAttribute("data-theme", "light");
-  themeBtn.textContent = "Theme: Light";
-  themeBtn.addEventListener("click", function () {
-    themeIdx = (themeIdx + 1) % themeOrder.length;
-    var t = themeOrder[themeIdx];
-    document.documentElement.setAttribute("data-theme", t === "auto" ? "" : t);
-    themeBtn.textContent = "Theme: " + t.charAt(0).toUpperCase() + t.slice(1);
-  });
 
   document.getElementById("downloadReportBtn").addEventListener("click", function () {
     window.print();
@@ -1567,11 +1559,11 @@
   var SURVEY_SLIDES = [
     { type: "landing", key: "price", unit: "€",
       prompt: "What's your budget for buying a property?",
-      placeholder: "e.g. 450,000", default: 555000,
-      skipNote: "Not sure yet? We'll suggest €555,000 — the price cap for the Dutch starters' 0% transfer-tax exemption — as a common benchmark. You can change it anytime." },
+      placeholder: "e.g. 450.000", default: 555000,
+      skipNote: "Not sure yet? We'll suggest €555.000 — the price cap for the Dutch starters' 0% transfer-tax exemption — as a common benchmark. You can change it anytime." },
     { type: "number", key: "monthlyRent", unit: "€ / month",
       prompt: "What would a comparable home cost you to rent?",
-      placeholder: "e.g. 1,800",
+      placeholder: "e.g. 1.800",
       getDefault: function () {
         var payment = estimateMonthlyMortgagePayment();
         return payment ? roundUpToHundred(Math.max(0, payment - 500)) : 2900;
@@ -1581,7 +1573,7 @@
         return payment
           ? "Not sure? Based on your budget, your estimated mortgage payment is about " + fmtEUR(payment) +
             "/month — renting comparable is usually a bit less, so we'll suggest " + fmtEUR(roundUpToHundred(Math.max(0, payment - 500))) + "/month. You can adjust it anytime."
-          : "We'll suggest a typical starting rent of €2,900 — you can adjust it anytime.";
+          : "We'll suggest a typical starting rent of €2.900 — you can adjust it anytime.";
       } },
     { type: "number", key: "holdingYears", unit: "years",
       prompt: "How many years do you expect to own this property before selling?",
@@ -1589,11 +1581,12 @@
       skipNote: "We'll assume 6 years, a common starting point — you can change it anytime." },
     { type: "downpayment", key: "downPayment", unit: "€",
       prompt: "How much would you like to put down as a down payment?",
-      placeholder: "e.g. 50,000", default: 0,
+      placeholder: "e.g. 50.000", default: 0,
       skipNote: "We'll assume no down payment (100% financed) - you can adjust it anytime." },
     { type: "choice", key: "transferTaxMode",
       context: "We're asking this to check whether you qualify for the 0% transfer-tax exemption.",
       prompt: "Are you (and any co-buyers) under 35, and will this be your first home to live in yourself?",
+      noSkip: true,
       options: [
         { label: "Yes — first home, under 35, and I'll live in it", value: "0",
           detail: "We'll apply the 0% starters exemption — no transfer tax on this purchase." },
@@ -1602,16 +1595,20 @@
         { label: "It's an investment, rental, or second home", value: "8",
           detail: "We'll apply the 8% rate for a second home, rental, or investment property." }
       ],
-      default: "2",
-      skipNote: "We'll assume the standard 2% transfer tax rate — you can change it anytime." },
+      default: "2" },
     { type: "number", key: "occupants", unit: "people",
       prompt: "How many people will live in the home?",
       placeholder: "e.g. 2", default: 2,
       skipNote: "We'll assume 2 occupants — you can change it anytime." },
     { type: "number", key: "furniture", unit: "€",
       prompt: "How much would you like to budget for furniture & interior setup?",
-      placeholder: "e.g. 5,000", default: 5000,
-      skipNote: "We'll suggest a typical €5,000 furniture budget — you can adjust it anytime." },
+      placeholder: "e.g. 5.000", default: 5000,
+      skipNote: "We'll suggest a typical €5.000 furniture budget — you can adjust it anytime." },
+    { type: "number", key: "investmentReturnPct", unit: "% / year",
+      prompt: "If you didn't buy, you'd keep your down payment invested and bank the monthly difference between rent and a mortgage payment. What annual return would that money earn?",
+      placeholder: "e.g. 5",
+      default: 5,
+      skipNote: "We'll assume a 5%/year return, a common long-term benchmark for a diversified investment portfolio — you can change it anytime." },
     { type: "closing" }
   ];
 
@@ -1654,6 +1651,7 @@
       case "downPayment": return value === 0 ? "Let's assume no down payment for now." : "Let's put " + fmtEUR(value) + " for now.";
       case "occupants": return "Let's put " + value + " " + (value === 1 ? "person" : "people") + " for now.";
       case "furniture": return "Let's put " + fmtEUR(value) + " for now.";
+      case "investmentReturnPct": return "Let's assume a " + value + "%/year return for now.";
       default: return "Let's put " + value + " for now.";
     }
   }
@@ -1706,7 +1704,7 @@
       ? '<p class="survey-note" id="surveyLoanNote" style="margin-bottom:4px"></p>' : '';
     var defaultVal = resolveDefault(slide);
     var placeholderText = (defaultVal !== undefined && defaultVal !== null)
-      ? Math.round(defaultVal).toLocaleString("en-US")
+      ? Math.round(defaultVal).toLocaleString("nl-NL")
       : (slide.placeholder || "");
     var valueAttr = answeredKeys[slide.key] ? ' value="' + state[slide.key] + '"' : '';
     var noSpinClass = (slide.unit === "€" || slide.unit === "€ / month") ? ' no-spin' : '';
@@ -1743,11 +1741,12 @@
       var opts = slide.options.map(function (o, i) {
         return '<button type="button" class="survey-choice" data-i="' + i + '">' + esc(o.label) + '</button>';
       }).join("");
+      var noteText = slide.noSkip ? "Hover or focus an option to see what it means." : resolveSkipNote(slide);
       return (slide.context ? '<p class="survey-context">' + esc(slide.context) + '</p>' : '') +
         '<h1 class="survey-h">' + esc(slide.prompt) + '</h1>' +
         '<div class="survey-choice-list">' + opts + '</div>' +
-        '<p class="survey-note" id="surveyNote">' + esc(resolveSkipNote(slide)) + '</p>' +
-        '<button type="button" class="survey-skip" id="surveySkipBtn">I\'m not sure yet</button>';
+        '<p class="survey-note" id="surveyNote">' + esc(noteText) + '</p>' +
+        (slide.noSkip ? '' : '<button type="button" class="survey-skip" id="surveySkipBtn">I\'m not sure yet</button>');
     }
     // number / downpayment
     return numberQuestionHTML(slide);
@@ -1769,7 +1768,7 @@
       setTimeout(finishSurvey, 1500);
     } else if (slide.type === "choice") {
       var choiceNote = document.getElementById("surveyNote");
-      var defaultNoteText = resolveSkipNote(slide);
+      var defaultNoteText = slide.noSkip ? "Hover or focus an option to see what it means." : resolveSkipNote(slide);
       container.querySelectorAll(".survey-choice").forEach(function (btn) {
         var opt = slide.options[parseInt(btn.getAttribute("data-i"), 10)];
         var showDetail = function () { if (opt.detail) choiceNote.textContent = opt.detail; };
@@ -1780,7 +1779,8 @@
         btn.addEventListener("blur", restoreNote);
         btn.addEventListener("click", function () { chooseOption(slide, opt.value); });
       });
-      document.getElementById("surveySkipBtn").addEventListener("click", surveySkip);
+      var choiceSkipBtn = document.getElementById("surveySkipBtn");
+      if (choiceSkipBtn) choiceSkipBtn.addEventListener("click", surveySkip);
     } else {
       var input = document.getElementById("surveyInput");
       input.focus();
