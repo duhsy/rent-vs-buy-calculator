@@ -290,6 +290,7 @@
   /* KPI cards grouped by Buying / Renting */
   .kpi-groups { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
   @media (max-width: 720px) { .kpi-groups { grid-template-columns: 1fr; } }
+  .kpi-groups > * { min-width: 0; }
   .kpi-group {
     background: var(--card); border-radius: 16px; padding: 18px 16px 16px;
     border-top: 3px solid transparent; box-shadow: var(--shadow);
@@ -374,14 +375,108 @@
   .report-row-value-big.is-buy { color: var(--buy-text); }
   .report-row-value-big.is-rent { color: var(--rent-text); }
 
-  .kpi-group-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  /* ---- Scenario Explorer: a live report widget, not a form. Desktop
+     docks it to the right of the main report; mobile drops it inline
+     right after the executive summary. ---- */
+  .results-shell { display: flex; gap: 24px; align-items: flex-start; }
+  .report-main { flex: 1 1 auto; min-width: 0; container-type: inline-size; }
+  @container (max-width: 620px) {
+    .kpi-groups { grid-template-columns: 1fr; }
+  }
+  .scenario-dock { width: 320px; flex: 0 0 auto; position: sticky; top: 20px; }
+  @media (max-width: 1040px) {
+    .results-shell { display: block; }
+    .scenario-dock { width: auto; position: static; margin-top: 24px; }
+  }
+
+  .scenario-explorer {
+    background: var(--card); border-radius: 20px; box-shadow: var(--shadow); padding: 28px 24px;
+  }
+  .scenario-title { font-family: var(--font-display); font-size: 21px; font-weight: 700; margin: 0 0 4px; }
+  .scenario-subtitle { font-size: 13.5px; color: var(--ink-soft); margin: 0 0 18px; line-height: 1.5; }
+  .scenario-helper {
+    font-size: 13.5px; color: var(--ink); background: var(--buy-tint); border-radius: 12px;
+    padding: 12px 14px; margin: 0 0 26px; line-height: 1.5;
+  }
+
+  .scenario-slider-label { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+  .scenario-slider-label .lbl {
+    font-size: 11.5px; color: var(--ink-soft); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .scenario-slider-value {
+    font-family: var(--font-display); font-size: 24px; font-weight: 800; color: var(--buy-text);
+    font-variant-numeric: tabular-nums;
+  }
+  input[type="range"].scenario-slider {
+    -webkit-appearance: none; appearance: none; width: 100%; height: 8px; border-radius: 999px;
+    background: var(--hairline); margin: 10px 0 22px; cursor: pointer;
+  }
+  input[type="range"].scenario-slider::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 26px; height: 26px; border-radius: 50%;
+    background: var(--card); border: 4px solid var(--buy); box-shadow: 0 2px 6px rgba(26,26,26,0.25);
+    cursor: grab; margin-top: -9px;
+  }
+  input[type="range"].scenario-slider::-moz-range-thumb {
+    width: 26px; height: 26px; border-radius: 50%; background: var(--card); border: 4px solid var(--buy);
+    box-shadow: 0 2px 6px rgba(26,26,26,0.25); cursor: grab;
+  }
+  input[type="range"].scenario-slider::-moz-range-track { height: 8px; border-radius: 999px; background: var(--hairline); }
+  input[type="range"].scenario-slider:focus-visible { outline: 2px solid var(--focus); outline-offset: 4px; }
+
+  .scenario-presets { display: flex; gap: 8px; margin: 0 0 28px; }
+  .scenario-preset {
+    flex: 1; background: var(--card-alt); border: none; border-radius: 12px; padding: 10px 6px 12px;
+    font-family: var(--font-body); font-size: 12px; font-weight: 600; color: var(--ink-soft); cursor: pointer;
+    text-align: center; line-height: 1.5; transition: background 0.15s ease, color 0.15s ease;
+  }
+  .scenario-preset .emoji { display: block; font-size: 18px; margin-bottom: 2px; }
+  .scenario-preset:hover { background: var(--buy-tint); color: var(--ink); }
+  .scenario-preset.active { background: var(--ink); color: var(--bg); }
+
+  .scenario-outcomes { display: flex; flex-direction: column; margin: 0 0 20px; }
+  .scenario-outcome-row {
+    display: flex; justify-content: space-between; align-items: baseline; gap: 10px; padding: 9px 0;
+    border-top: 1px solid var(--hairline);
+  }
+  .scenario-outcome-row:first-child { border-top: none; }
+  .scenario-outcome-label { font-size: 12.5px; color: var(--ink-soft); }
+  .scenario-outcome-value {
+    font-family: var(--font-data); font-size: 14.5px; font-weight: 700; font-variant-numeric: tabular-nums;
+    color: var(--ink); transition: color 0.25s ease;
+  }
+  .scenario-outcome-value.value-flash { color: var(--buy-text); }
+  @media (prefers-reduced-motion: reduce) {
+    .scenario-outcome-value { transition: none; }
+  }
+
+  .scenario-recommendation {
+    text-align: center; border-radius: 14px; padding: 13px; margin: 4px 0 24px;
+    font-family: var(--font-display); font-weight: 700; font-size: 15px;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+  .scenario-recommendation.is-buy-strong { background: var(--buy); color: var(--highlight-ink); }
+  .scenario-recommendation.is-buy { background: var(--buy-tint); color: var(--buy-text); }
+  .scenario-recommendation.is-tie { background: var(--card-alt); color: var(--ink); }
+  .scenario-recommendation.is-rent { background: var(--rent-tint); color: var(--rent-text); }
+  .scenario-recommendation.is-rent-strong { background: var(--rent); color: #fff; }
+
+  .scenario-table { width: 100%; border-collapse: collapse; }
+  .scenario-table td { padding: 7px 4px; font-size: 12.5px; border-top: 1px solid var(--hairline); transition: background 0.2s ease; }
+  .scenario-table tr:first-child td { border-top: none; }
+  .scenario-table td:first-child { color: var(--ink-soft); font-variant-numeric: tabular-nums; width: 52px; }
+  .scenario-table td:last-child { text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .scenario-table tr.is-current td { background: var(--buy-tint); }
+  .scenario-table tr.is-current td:first-child { font-weight: 800; color: var(--buy-text); border-radius: 8px 0 0 8px; }
+  .scenario-table tr.is-current td:last-child { color: var(--buy-text); border-radius: 0 8px 8px 0; }
+
+  .kpi-group-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; min-width: 0; }
   @media (max-width: 460px) { .kpi-group-grid { grid-template-columns: 1fr; } }
   .kpi {
-    background: var(--card); border-radius: 9px;
+    background: var(--card); border-radius: 9px; min-width: 0;
     padding: 12px 13px; box-shadow: var(--shadow);
   }
   .kpi .label { font-size: 11px; color: var(--ink-soft); margin: 0 0 6px; }
-  .kpi .value { font-family: var(--font-data); font-size: 18px; font-weight: 600; font-variant-numeric: tabular-nums; margin: 0; }
+  .kpi .value { font-family: var(--font-data); font-size: 18px; font-weight: 600; font-variant-numeric: tabular-nums; margin: 0; overflow-wrap: anywhere; }
   .kpi .value.small { font-size: 14px; }
   .kpi .note { font-size: 10.5px; color: var(--muted); margin: 4px 0 0; }
 
@@ -459,10 +554,10 @@
   /* "Download report (PDF)" uses the browser's native print-to-PDF -- no
      extra dependency needed. This tailors what actually ends up on paper. */
   @media print {
-    .masthead-actions, .panel-sticky, .cta-card, .chart-toggle-btn,
-    #tooltip, #modalOverlay, #surveyRoot, #contactFooter { display: none !important; }
+    .masthead-actions, .panel-sticky, .cta-card, .chart-toggle-btn, .scenario-dock, .scenario-explorer,
+    .edit-inputs-fab, #tooltip, #modalOverlay, #surveyRoot, #contactFooter { display: none !important; }
     .chart-details[hidden] { display: block !important; }
-    .layout { display: block !important; }
+    .layout, .results-shell { display: block !important; }
     body { background: #fff !important; }
     .verdict, .kpi, .insight-card, .chart-card, .kpi-group { box-shadow: none !important; }
   }
@@ -936,9 +1031,9 @@
     { key: "holdingYears", label: "Holding period", unit: "years", step: 1, group: "timeline",
       infoCaption: "How many years do you expect to own this property before selling?" },
     { key: "holdingCostInflationPct", label: "Holding cost inflation", unit: "%/yr", step: 0.1, group: "timeline" },
-    { key: "houseGrowthPct", label: "House price growth", unit: "%/yr", step: 0.1, group: "timeline",
-      caption: "Based on 2026 outlooks from ABN AMRO, Rabobank, and ING (roughly 1.5–3.1%/yr) — a rough middle estimate." },
     { key: "investmentReturnPct", label: "Investment return (alt. use of capital)", unit: "%/yr", step: 0.1, group: "timeline" }
+    // House price growth is no longer a drawer field -- explored live via
+    // the Scenario Explorer widget in the report instead (see below).
   ];
 
   function fieldHTML(def) {
@@ -1200,6 +1295,191 @@
     return { diff: diff, buyWins: diff < -250, rentWins: diff > 250 };
   }
 
+  // -----------------------------------------------------------------------
+  // SCENARIO EXPLORER — a live "what if home prices grow differently"
+  // sandbox embedded in the report. Dragging the slider previews
+  // computeAll() with houseGrowthPct swapped out; it never touches the
+  // committed state, and updates instantly with no Recalculate step —
+  // exploring uncertainty is the whole point, unlike the drawer's other
+  // deliberate inputs.
+  // -----------------------------------------------------------------------
+  var SCENARIO_MIN = -2, SCENARIO_MAX = 8, SCENARIO_STEP = 0.5;
+  var SCENARIO_TABLE_PCTS = [-2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8];
+  var scenarioExploredPct = null;
+  var scenarioLastValues = null;
+
+  function computeScenarioPreview(growthPct) {
+    var s = {};
+    for (var k in state) { if (state.hasOwnProperty(k)) s[k] = state[k]; }
+    s.houseGrowthPct = growthPct;
+    return computeAll(s);
+  }
+
+  function classifyRecommendation(model) {
+    var diff = model.netCostBuy - model.netCostRent;
+    var base = Math.max(1, (model.netCostBuy + model.netCostRent) / 2);
+    var pct = diff / base;
+    if (pct < -0.20) return { label: "Buying strongly wins", cls: "is-buy-strong" };
+    if (pct < -0.05) return { label: "Buying slightly wins", cls: "is-buy" };
+    if (pct <= 0.05) return { label: "Almost identical", cls: "is-tie" };
+    if (pct <= 0.20) return { label: "Renting slightly wins", cls: "is-rent" };
+    return { label: "Renting strongly wins", cls: "is-rent-strong" };
+  }
+
+  function scenarioHelperText(pct, baseModel) {
+    var thresholdPct = baseModel.breakEvenAnnualized * 100;
+    var line2 = pct >= thresholdPct
+      ? "Buying benefits more from stronger price growth."
+      : "Lower appreciation makes renting relatively more attractive.";
+    return "Assuming home prices grow " + fmtPct(pct / 100, 1) + " annually. " + line2;
+  }
+
+  function scenarioDiffText(model) {
+    var diff = model.netCostBuy - model.netCostRent;
+    if (diff < -250) return "Buying saves " + fmtEUR(-diff);
+    if (diff > 250) return "Renting saves " + fmtEUR(diff);
+    return "Tie";
+  }
+
+  function scenarioSensitivityRows(baseModel) {
+    return SCENARIO_TABLE_PCTS.map(function (pct) {
+      var m = pct === Math.round(state.houseGrowthPct * 2) / 2 ? baseModel : computeScenarioPreview(pct);
+      var diff = m.netCostBuy - m.netCostRent;
+      var text = diff < -250 ? "Buying saves " + fmtCompactEUR(-diff)
+        : diff > 250 ? "Renting saves " + fmtCompactEUR(diff)
+        : "Tie";
+      return { pct: pct, text: text };
+    });
+  }
+
+  function scenarioExplorerHTML(model) {
+    scenarioExploredPct = state.houseGrowthPct;
+    scenarioLastValues = null;
+    var rows = scenarioSensitivityRows(model);
+    var rec = classifyRecommendation(model);
+    var last = model.years[model.holdingYears - 1];
+
+    var presets = [
+      { emoji: "😟", label: "Pessimistic", value: 1 },
+      { emoji: "🙂", label: "Expected", value: 3 },
+      { emoji: "🚀", label: "Optimistic", value: 5 }
+    ];
+
+    return '<div class="scenario-explorer" id="scenarioExplorer">' +
+      '<p class="scenario-title">Explore Scenarios</p>' +
+      '<p class="scenario-subtitle">How would your result change if home prices grow differently?</p>' +
+      '<p class="scenario-helper" id="scenarioHelper">' + esc(scenarioHelperText(scenarioExploredPct, model)) + '</p>' +
+
+      '<div class="scenario-slider-label">' +
+        '<span class="lbl">Home price growth</span>' +
+        '<span class="scenario-slider-value" id="scenarioValue">' + fmtPct(scenarioExploredPct / 100, 1) + '/yr</span>' +
+      '</div>' +
+      '<input type="range" class="scenario-slider" id="scenarioSlider" min="' + SCENARIO_MIN + '" max="' + SCENARIO_MAX +
+        '" step="' + SCENARIO_STEP + '" value="' + scenarioExploredPct + '">' +
+
+      '<div class="scenario-presets" id="scenarioPresets">' +
+      presets.map(function (p) {
+        return '<button type="button" class="scenario-preset" data-value="' + p.value + '">' +
+          '<span class="emoji">' + p.emoji + '</span>' + p.label + '<br>' + p.value + '%</button>';
+      }).join("") +
+      '</div>' +
+
+      '<div class="scenario-outcomes">' +
+        '<div class="scenario-outcome-row"><span class="scenario-outcome-label">Final home value</span>' +
+          '<span class="scenario-outcome-value" id="sc_homeValue" data-raw="' + last.homeValue + '">' + fmtEUR(last.homeValue) + '</span></div>' +
+        '<div class="scenario-outcome-row"><span class="scenario-outcome-label">Buying total cost</span>' +
+          '<span class="scenario-outcome-value" id="sc_netCostBuy" data-raw="' + model.netCostBuy + '">' + fmtEUR(model.netCostBuy) + '</span></div>' +
+        '<div class="scenario-outcome-row"><span class="scenario-outcome-label">Net wealth if sold</span>' +
+          '<span class="scenario-outcome-value" id="sc_netWealth" data-raw="' + last.recoverable + '">' + fmtEUR(last.recoverable) + '</span></div>' +
+        '<div class="scenario-outcome-row"><span class="scenario-outcome-label">Difference</span>' +
+          '<span class="scenario-outcome-value" id="sc_diff">' + scenarioDiffText(model) + '</span></div>' +
+        '<div class="scenario-outcome-row"><span class="scenario-outcome-label">Break-even year</span>' +
+          '<span class="scenario-outcome-value" id="sc_breakEven">' + (model.crossoverHoldingYear === null ? "—" : model.crossoverHoldingYear) + '</span></div>' +
+      '</div>' +
+
+      '<div class="scenario-recommendation ' + rec.cls + '" id="scenarioRecommendation">' + rec.label + '</div>' +
+
+      '<table class="scenario-table" id="scenarioTable"><tbody>' +
+      rows.map(function (r) {
+        var isCurrent = r.pct === Math.round(scenarioExploredPct * 2) / 2;
+        return '<tr class="' + (isCurrent ? "is-current" : "") + '" data-pct="' + r.pct + '">' +
+          '<td>' + (r.pct >= 0 ? "+" : "") + r.pct + '%</td><td>' + esc(r.text) + '</td></tr>';
+      }).join("") +
+      '</tbody></table>' +
+      '</div>';
+  }
+
+  function animateOutcomeValue(el, toRaw) {
+    var fromRaw = parseFloat(el.getAttribute("data-raw"));
+    if (isNaN(fromRaw)) fromRaw = toRaw;
+    el.setAttribute("data-raw", toRaw);
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || fromRaw === toRaw) {
+      el.textContent = fmtEUR(toRaw);
+    } else {
+      var start = null, duration = 350;
+      (function step(ts) {
+        if (!start) start = ts;
+        var progress = Math.min((ts - start) / duration, 1);
+        var eased = 1 - Math.pow(1 - progress, 3);
+        el.textContent = fmtEUR(fromRaw + (toRaw - fromRaw) * eased);
+        if (progress < 1) requestAnimationFrame(step);
+        else el.textContent = fmtEUR(toRaw);
+      })();
+    }
+    el.classList.remove("value-flash");
+    void el.offsetWidth;
+    el.classList.add("value-flash");
+  }
+
+  function updateScenarioExplorer(baseModel) {
+    var pct = scenarioExploredPct;
+    var m = computeScenarioPreview(pct);
+    var last = m.years[m.holdingYears - 1];
+    var rec = classifyRecommendation(m);
+
+    document.getElementById("scenarioValue").textContent = fmtPct(pct / 100, 1) + "/yr";
+    document.getElementById("scenarioHelper").textContent = scenarioHelperText(pct, baseModel);
+
+    animateOutcomeValue(document.getElementById("sc_homeValue"), last.homeValue);
+    animateOutcomeValue(document.getElementById("sc_netCostBuy"), m.netCostBuy);
+    animateOutcomeValue(document.getElementById("sc_netWealth"), last.recoverable);
+
+    var diffEl = document.getElementById("sc_diff");
+    diffEl.textContent = scenarioDiffText(m);
+    diffEl.classList.remove("value-flash"); void diffEl.offsetWidth; diffEl.classList.add("value-flash");
+
+    var beEl = document.getElementById("sc_breakEven");
+    beEl.textContent = m.crossoverHoldingYear === null ? "—" : m.crossoverHoldingYear;
+    beEl.classList.remove("value-flash"); void beEl.offsetWidth; beEl.classList.add("value-flash");
+
+    var recEl = document.getElementById("scenarioRecommendation");
+    recEl.className = "scenario-recommendation " + rec.cls;
+    recEl.textContent = rec.label;
+
+    document.querySelectorAll(".scenario-preset").forEach(function (btn) {
+      btn.classList.toggle("active", parseFloat(btn.getAttribute("data-value")) === pct);
+    });
+    document.querySelectorAll("#scenarioTable tr").forEach(function (tr) {
+      tr.classList.toggle("is-current", parseFloat(tr.getAttribute("data-pct")) === Math.round(pct * 2) / 2);
+    });
+  }
+
+  function wireScenarioExplorer(baseModel) {
+    var slider = document.getElementById("scenarioSlider");
+    if (!slider) return;
+    slider.addEventListener("input", function (e) {
+      scenarioExploredPct = parseFloat(e.target.value);
+      updateScenarioExplorer(baseModel);
+    });
+    document.querySelectorAll(".scenario-preset").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        scenarioExploredPct = parseFloat(btn.getAttribute("data-value"));
+        slider.value = scenarioExploredPct;
+        updateScenarioExplorer(baseModel);
+      });
+    });
+  }
+
   var mobileReportMQ = window.matchMedia("(max-width: 720px)");
 
   function renderResults(model) {
@@ -1210,6 +1490,7 @@
     drawHoldingPeriodChart(model);
     wireChecklistCta();
     wireChartToggles();
+    wireScenarioExplorer(model);
   }
 
   function renderResultsDesktop(model) {
@@ -1250,7 +1531,8 @@
     html += chartCardHoldingPeriod(model);
     html += checklistCtaHTML();
 
-    return html;
+    return '<div class="results-shell"><div class="report-main">' + html + '</div>' +
+      '<aside class="scenario-dock">' + scenarioExplorerHTML(model) + '</aside></div>';
   }
 
   // -----------------------------------------------------------------------
@@ -1391,6 +1673,7 @@
     var w = winnerInfo(model);
     return reportHeroHTML(model, w) +
       reportSummaryHTML(model, w) +
+      '<div class="report-section">' + scenarioExplorerHTML(model) + '</div>' +
       reportBuyingHTML(model) +
       reportRentingHTML(model) +
       reportTimelineHTML(model) +
