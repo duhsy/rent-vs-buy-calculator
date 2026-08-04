@@ -250,6 +250,65 @@
   .tie-note {
     text-align: center; font-size: 13px; color: var(--ink-soft); margin: -8px 0 20px;
   }
+
+  /* ---- Mobile report (≤720px): a read-top-to-bottom personalized report
+     instead of the desktop dashboard. Assumptions move to the very end. ---- */
+  @media (max-width: 720px) {
+    .panel-sticky { order: 2; }
+    #results { order: 1; }
+  }
+  .report-hero { text-align: center; padding: 4px 4px 26px; }
+  .report-hero-headline {
+    font-family: var(--font-display); font-size: 25px; font-weight: 700; line-height: 1.35;
+    margin: 0 0 10px; text-wrap: balance;
+  }
+  .report-hero-headline strong { font-variant-numeric: tabular-nums; }
+  .report-hero-headline strong.is-buy { color: var(--buy); }
+  .report-hero-headline strong.is-rent { color: var(--rent); }
+  .report-hero-sub { font-size: 14px; color: var(--ink-soft); margin: 0; }
+
+  .report-section { margin-bottom: 34px; }
+  .report-eyebrow {
+    font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted);
+    font-weight: 600; margin: 0 0 14px;
+  }
+  .report-text { font-size: 15px; line-height: 1.6; color: var(--ink); margin: 0 0 10px; }
+  .report-text strong { font-variant-numeric: tabular-nums; }
+
+  .report-summary-block { margin-bottom: 20px; }
+  .report-summary-title { font-family: var(--font-display); font-size: 17px; font-weight: 700; margin: 0 0 8px; }
+  .report-summary-title.is-buy { color: var(--buy); }
+  .report-summary-title.is-rent { color: var(--rent); }
+  .report-row {
+    display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
+    padding: 8px 0; border-top: 1px solid var(--hairline);
+  }
+  .report-summary-title + .report-row { border-top: none; }
+  .report-row-label { font-size: 13.5px; color: var(--ink-soft); }
+  .report-row-value { font-family: var(--font-data); font-size: 14.5px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .report-row.report-row-total { border-top: 2px solid var(--ink); margin-top: 2px; padding-top: 11px; }
+  .report-row.report-row-total .report-row-label { color: var(--ink); font-weight: 600; }
+  .report-row.report-row-total .report-row-value { font-size: 17px; }
+  .report-diff-line {
+    font-family: var(--font-display); font-size: 16.5px; font-weight: 600; text-align: center;
+    margin: 20px 0 0; line-height: 1.4;
+  }
+  .report-diff-line strong { font-variant-numeric: tabular-nums; }
+  .report-diff-line strong.is-buy { color: var(--buy); }
+  .report-diff-line strong.is-rent { color: var(--rent); }
+
+  .report-story-step { padding: 2px 0; }
+  .report-story-label { font-family: var(--font-display); font-size: 15px; font-weight: 700; margin: 0 0 8px; }
+  .report-story-note { font-size: 12px; color: var(--muted); margin: 4px 0 0; }
+  .report-arrow { text-align: center; color: var(--muted); font-size: 15px; margin: 8px 0; }
+  .report-story-result {
+    display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
+    margin-top: 8px; padding-top: 14px; border-top: 2px solid var(--ink);
+  }
+  .report-row-value-big { font-size: 22px; }
+  .report-row-value-big.is-buy { color: var(--buy); }
+  .report-row-value-big.is-rent { color: var(--rent); }
+
   .kpi-group-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   @media (max-width: 460px) { .kpi-group-grid { grid-template-columns: 1fr; } }
   .kpi {
@@ -1056,11 +1115,27 @@
   // ---------------------------------------------------------------------
   // RESULTS RENDER
   // ---------------------------------------------------------------------
-  function renderResults(model) {
-    var html = '';
+  function winnerInfo(model) {
     var diff = model.netCostBuy - model.netCostRent;
-    var buyWins = diff < -250;
-    var rentWins = diff > 250;
+    return { diff: diff, buyWins: diff < -250, rentWins: diff > 250 };
+  }
+
+  var mobileReportMQ = window.matchMedia("(max-width: 720px)");
+
+  function renderResults(model) {
+    document.getElementById("results").innerHTML = mobileReportMQ.matches
+      ? renderResultsMobile(model)
+      : renderResultsDesktop(model);
+    drawScenarioChart(model);
+    drawHoldingPeriodChart(model);
+    wireChecklistCta();
+    wireChartToggles();
+  }
+
+  function renderResultsDesktop(model) {
+    var html = '';
+    var w = winnerInfo(model);
+    var diff = w.diff, buyWins = w.buyWins, rentWins = w.rentWins;
     var buyBadge = buyWins ? ' <span class="winner-badge">🏆 Wins by ' + fmtEUR(-diff) + '</span>' : '';
     var rentBadge = rentWins ? ' <span class="winner-badge">🏆 Wins by ' + fmtEUR(diff) + '</span>' : '';
 
@@ -1095,12 +1170,151 @@
     html += chartCardHoldingPeriod(model);
     html += checklistCtaHTML();
 
-    document.getElementById("results").innerHTML = html;
+    return html;
+  }
 
-    drawScenarioChart(model);
-    drawHoldingPeriodChart(model);
-    wireChecklistCta();
-    wireChartToggles();
+  // -----------------------------------------------------------------------
+  // MOBILE — a personalized report, read top-to-bottom, instead of a
+  // dashboard of equally-weighted cards. Same model, same calculations;
+  // only grouping, ordering, and presentation differ from desktop.
+  // -----------------------------------------------------------------------
+  function reportRow(label, value, cls) {
+    return '<div class="report-row' + (cls ? ' ' + cls : '') + '"><span class="report-row-label">' + esc(label) + '</span>' +
+      '<span class="report-row-value">' + value + '</span></div>';
+  }
+
+  function reportHeroHTML(model, w) {
+    var years = state.holdingYears;
+    var yearsLabel = years + ' year' + (years === 1 ? '' : 's');
+    var headline;
+    if (w.buyWins) headline = 'Buying is estimated to save <strong class="is-buy">' + fmtEUR(-w.diff) + '</strong> over ' + yearsLabel + '.';
+    else if (w.rentWins) headline = 'Renting is estimated to save <strong class="is-rent">' + fmtEUR(w.diff) + '</strong> over ' + yearsLabel + '.';
+    else headline = 'Buying and renting cost about the same over ' + yearsLabel + '.';
+
+    var cy = model.crossoverHoldingYear;
+    var sub = cy === null
+      ? "Buying doesn't break even within " + model.holdingSeries.length + " years at current assumptions."
+      : (cy === 1 ? 'Buying is cheaper than renting in every year of ownership.' : 'Buying becomes cheaper after Year ' + cy + '.');
+
+    return '<div class="report-hero">' +
+      '<p class="report-hero-headline">' + headline + '</p>' +
+      '<p class="report-hero-sub">' + esc(sub) + '</p>' +
+      '</div>';
+  }
+
+  function reportSummaryHTML(model, w) {
+    var last = model.years[model.holdingYears - 1];
+    var appreciation = last.homeValue - state.price;
+    var diffLine = w.buyWins
+      ? 'Buying costs <strong class="is-buy">' + fmtEUR(-w.diff) + '</strong> less than renting.'
+      : (w.rentWins ? 'Renting costs <strong class="is-rent">' + fmtEUR(w.diff) + '</strong> less than buying.' : 'Both options cost about the same.');
+
+    return '<div class="report-section">' +
+      '<p class="report-eyebrow">Executive summary</p>' +
+      '<div class="report-summary-block">' +
+        '<p class="report-summary-title is-buy">Buying</p>' +
+        reportRow('Initial cash required', fmtEUR(model.initialOutlay)) +
+        reportRow('Monthly mortgage', fmtEUR(model.monthlyPayment)) +
+        reportRow('Expected home appreciation', fmtEUR(appreciation)) +
+        reportRow('Total buying cost', fmtEUR(model.netCostBuy), 'report-row-total') +
+      '</div>' +
+      '<div class="report-summary-block">' +
+        '<p class="report-summary-title is-rent">Renting</p>' +
+        reportRow('Monthly rent', fmtEUR(state.monthlyRent)) +
+        reportRow('Rent increase', fmtPct(state.rentGrowthPct / 100, 1) + '/yr') +
+        reportRow('Investment return', fmtPct(state.investmentReturnPct / 100, 1) + '/yr') +
+        reportRow('Total renting cost', fmtEUR(model.netCostRent), 'report-row-total') +
+      '</div>' +
+      '<p class="report-diff-line">' + diffLine + '</p>' +
+      '</div>';
+  }
+
+  function reportBuyingHTML(model) {
+    var last = model.years[model.holdingYears - 1];
+    return '<div class="report-section">' +
+      '<p class="report-eyebrow">Buying, step by step</p>' +
+      '<div class="report-story">' +
+        '<div class="report-story-step">' +
+          '<p class="report-story-label">Mortgage</p>' +
+          reportRow('Loan amount', fmtEUR(model.loanAmount)) +
+          reportRow('Initial cash needed', fmtEUR(model.initialOutlay)) +
+          reportRow('Monthly payment', fmtEUR(model.monthlyPayment)) +
+        '</div>' +
+        '<p class="report-arrow" aria-hidden="true">↓</p>' +
+        '<div class="report-story-step">' +
+          '<p class="report-story-label">Ownership</p>' +
+          reportRow('Monthly holding costs', fmtEUR(model.totalMonthlyHolding)) +
+          '<p class="report-story-note">VVE fees, property tax, insurance, and maintenance.</p>' +
+        '</div>' +
+        '<p class="report-arrow" aria-hidden="true">↓</p>' +
+        '<div class="report-story-step">' +
+          '<p class="report-story-label">Selling after ' + state.holdingYears + ' year' + (state.holdingYears === 1 ? '' : 's') + '</p>' +
+          reportRow('Estimated home value', fmtEUR(last.homeValue)) +
+          reportRow('Recovered after selling & mortgage payoff', fmtEUR(last.recoverable)) +
+        '</div>' +
+        '<p class="report-arrow" aria-hidden="true">↓</p>' +
+        '<div class="report-story-result">' +
+          '<span class="report-row-label">Final buying cost</span>' +
+          '<span class="report-row-value report-row-value-big is-buy">' + fmtEUR(model.netCostBuy) + '</span>' +
+        '</div>' +
+      '</div>' +
+      '</div>';
+  }
+
+  function reportRentingHTML(model) {
+    var last = model.years[model.holdingYears - 1];
+    var investGain = last.cumRent - last.netCostRent;
+    return '<div class="report-section">' +
+      '<p class="report-eyebrow">Renting, step by step</p>' +
+      '<div class="report-story">' +
+        '<div class="report-story-step">' +
+          '<p class="report-story-label">Monthly rent</p>' +
+          reportRow('Starting rent', fmtEUR(state.monthlyRent)) +
+        '</div>' +
+        '<p class="report-arrow" aria-hidden="true">↓</p>' +
+        '<div class="report-story-step">' +
+          '<p class="report-story-label">Rent growth</p>' +
+          reportRow('Annual increase', fmtPct(state.rentGrowthPct / 100, 1) + '/yr') +
+        '</div>' +
+        '<p class="report-arrow" aria-hidden="true">↓</p>' +
+        '<div class="report-story-step">' +
+          '<p class="report-story-label">Investment</p>' +
+          reportRow('Return on unspent capital', fmtPct(state.investmentReturnPct / 100, 1) + '/yr') +
+          reportRow('Investment gain over ' + state.holdingYears + ' yr', fmtEUR(investGain)) +
+        '</div>' +
+        '<p class="report-arrow" aria-hidden="true">↓</p>' +
+        '<div class="report-story-result">' +
+          '<span class="report-row-label">Final renting cost</span>' +
+          '<span class="report-row-value report-row-value-big is-rent">' + fmtEUR(model.netCostRent) + '</span>' +
+        '</div>' +
+      '</div>' +
+      '</div>';
+  }
+
+  function reportTimelineHTML(model) {
+    var scenarioInsight = 'Minimum sale price for buying to beat renting: <strong>' + fmtEUR(model.breakEvenPrice) + '</strong> (' +
+      fmtPct(model.breakEvenTotalAppreciation, 1) + ' total price change from today).';
+    var cy = model.crossoverHoldingYear;
+    var holdingInsight = cy === null
+      ? ("Doesn't break even within " + model.holdingSeries.length + ' years at current assumptions.')
+      : ('Break-even holding period: <strong>' + cy + ' year' + (cy === 1 ? '' : 's') + '</strong>.');
+    return '<div class="report-section">' +
+      '<p class="report-eyebrow">Timeline &amp; break-even</p>' +
+      '<p class="report-text">' + scenarioInsight + '</p>' +
+      '<p class="report-text">' + holdingInsight + '</p>' +
+      chartCardScenario(model) +
+      chartCardHoldingPeriod(model) +
+      '</div>';
+  }
+
+  function renderResultsMobile(model) {
+    var w = winnerInfo(model);
+    return reportHeroHTML(model, w) +
+      reportSummaryHTML(model, w) +
+      reportBuyingHTML(model) +
+      reportRentingHTML(model) +
+      reportTimelineHTML(model) +
+      checklistCtaHTML();
   }
 
   function insightsHTML(model) {
@@ -1570,6 +1784,12 @@
     buildInputPanel();
     refresh();
   }
+
+  // Re-render if the viewport crosses the mobile-report breakpoint (e.g. a
+  // tablet rotation or a resized browser window), not just on input changes.
+  mobileReportMQ.addEventListener("change", function () {
+    if (!document.getElementById("dashboardRoot").classList.contains("hidden")) refresh();
+  });
 
   // ---------------------------------------------------------------------
   // ONBOARDING SURVEY — Typeform-style, one question at a time.
