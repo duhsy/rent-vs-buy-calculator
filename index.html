@@ -141,17 +141,19 @@
 
   /* ---- Inputs live in a collapsible drawer, not a persistent column.
      Desktop: docked left, pushes/reflows the report when open. Report
-     auto-expands to fill the space when the drawer is collapsed.
+     auto-expands to fill the space when the drawer is collapsed. Animated
+     with width/margin (not grid-template-columns, which Safari won't
+     animate smoothly) so the collapse is a real transition everywhere.
      Mobile: hidden by default, slides over the report as an overlay. ---- */
-  .layout { display: grid; grid-template-columns: 0px 1fr; gap: 0; align-items: start;
-    transition: grid-template-columns 0.32s cubic-bezier(0.4,0,0.2,1); }
-  .layout.drawer-open { grid-template-columns: 340px 1fr; gap: 24px; }
-  .layout > * { min-width: 0; }
+  .layout { display: flex; align-items: flex-start; }
+  .layout > #results { flex: 1 1 auto; min-width: 0; }
 
   .panel-sticky {
     position: sticky; top: 20px; max-height: calc(100vh - 40px); overflow: hidden; border-radius: 16px;
+    width: 0; margin-right: 0; flex: 0 0 auto;
+    transition: width 0.32s cubic-bezier(0.4,0,0.2,1), margin-right 0.32s cubic-bezier(0.4,0,0.2,1);
   }
-  .layout.drawer-open .panel-sticky { overflow-y: auto; overflow-x: hidden; }
+  .layout.drawer-open .panel-sticky { width: 340px; margin-right: 24px; overflow-y: auto; overflow-x: hidden; }
 
   /* ---- Input panel: all sections always expanded (no accordion), the
      card itself scrolls internally so opening it never changes page length ---- */
@@ -160,7 +162,7 @@
     padding: 4px 0; box-shadow: var(--shadow); width: 340px;
   }
   @media (max-width: 720px) {
-    .layout { grid-template-columns: 1fr !important; gap: 0; }
+    .layout { display: block; }
     .panel-sticky {
       position: fixed; top: 0; left: 0; height: 100dvh; max-height: none; width: min(360px, 88vw);
       z-index: 300; transform: translateX(-100%); transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
