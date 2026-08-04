@@ -6,24 +6,28 @@
 <style>
   :root {
     color-scheme: light;
-    --bg:            #F7F4EE;
+    --bg:            #FFFDF8;
     --card:          #FFFFFF;
-    --card-alt:      #F3EFE7;
-    --ink:           #211E1C;
-    --ink-soft:      #5C564C;
-    --muted:         #948C7E;
-    --hairline:      #E6E0D4;
-    --rule:          #211E1C;
-    --buy:           #144474;
-    --buy-tint:      #D7D5EB;
-    --buy-tint-strong: #CBC9E5;
-    --rent:          #BE4737;
-    --rent-tint:     #F8C1CB;
-    --rent-tint-strong: #F6ADBB;
-    --error:         #B51819;
-    --error-tint:    #F9EDED;
-    --focus:         #144474;
-    --shadow:        0 1px 2px rgba(33,30,28,0.06), 0 8px 24px -12px rgba(33,30,28,0.12);
+    --card-alt:      #F4F1E9;
+    --ink:           #1A1A1A;
+    --ink-soft:      #4A4A47;
+    --muted:         #726F67;
+    --hairline:      #ECE8DD;
+    --rule:          #D8FF3E;
+    --buy:           #11C5BF;
+    --buy-text:      #0A7A76;
+    --buy-tint:      #E3FBFA;
+    --buy-tint-strong: #B9F3F0;
+    --rent:          #2F6BFF;
+    --rent-text:     #2450C2;
+    --rent-tint:     #E8EDFF;
+    --rent-tint-strong: #C4D3FF;
+    --highlight:     #D8FF3E;
+    --highlight-ink: #1A1A1A;
+    --error:         #E63946;
+    --error-tint:    #FDEDEE;
+    --focus:         #11C5BF;
+    --shadow:        0 1px 2px rgba(26,26,26,0.04), 0 8px 20px -14px rgba(26,26,26,0.10);
     --font-display: 'Sora', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     --font-body:    'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     --font-data:    ui-monospace, 'SF Mono', 'Cascadia Mono', 'Roboto Mono', Menlo, monospace;
@@ -31,54 +35,63 @@
   @media (prefers-color-scheme: dark) {
     :root:where(:not([data-theme="light"])) {
       color-scheme: dark;
-      --bg:            #181511;
-      --card:          #211D18;
-      --card-alt:      #2A251F;
-      --ink:           #EDE7DF;
-      --ink-soft:      #C7BFB2;
-      --muted:         #8A8175;
-      --hairline:      #3A342C;
-      --rule:          #EDE7DF;
-      --buy:           #4F80C0;
-      --buy-tint:      #2B333D;
-      --buy-tint-strong: #324358;
-      --rent:          #E86B57;
-      --rent-tint:     #492D25;
-      --rent-tint-strong: #67382E;
-      --error:         #CF4643;
-      --error-tint:    #461C18;
-      --focus:         #4F80C0;
+      --bg:            #141414;
+      --card:          #1E1E1E;
+      --card-alt:      #262624;
+      --ink:           #F5F3EC;
+      --ink-soft:      #C9C6BE;
+      --muted:         #8F8C84;
+      --hairline:      #333330;
+      --rule:          #D8FF3E;
+      --buy:           #2DE0D9;
+      --buy-text:      #2DE0D9;
+      --buy-tint:      #103331;
+      --buy-tint-strong: #164C48;
+      --rent:          #6E93FF;
+      --rent-text:     #6E93FF;
+      --rent-tint:     #1B2340;
+      --rent-tint-strong: #263159;
+      --highlight:     #D8FF3E;
+      --highlight-ink: #1A1A1A;
+      --error:         #FF6B6B;
+      --error-tint:    #3A1A1A;
+      --focus:         #2DE0D9;
       --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.5);
     }
   }
   :root[data-theme="dark"] {
     color-scheme: dark;
-    --bg:            #181511;
-    --card:          #211D18;
-    --card-alt:      #2A251F;
-    --ink:           #EDE7DF;
-    --ink-soft:      #C7BFB2;
-    --muted:         #8A8175;
-    --hairline:      #3A342C;
-    --rule:          #EDE7DF;
-    --buy:           #4F80C0;
-    --buy-tint:      #2B333D;
-    --buy-tint-strong: #324358;
-    --rent:          #E86B57;
-    --rent-tint:     #492D25;
-    --rent-tint-strong: #67382E;
-    --error:         #CF4643;
-    --error-tint:    #461C18;
-    --focus:         #4F80C0;
+    --bg:            #141414;
+    --card:          #1E1E1E;
+    --card-alt:      #262624;
+    --ink:           #F5F3EC;
+    --ink-soft:      #C9C6BE;
+    --muted:         #8F8C84;
+    --hairline:      #333330;
+    --rule:          #D8FF3E;
+    --buy:           #2DE0D9;
+    --buy-text:      #2DE0D9;
+    --buy-tint:      #103331;
+    --buy-tint-strong: #164C48;
+    --rent:          #6E93FF;
+    --rent-text:     #6E93FF;
+    --rent-tint:     #1B2340;
+    --rent-tint-strong: #263159;
+    --highlight:     #D8FF3E;
+    --highlight-ink: #1A1A1A;
+    --error:         #FF6B6B;
+    --error-tint:    #3A1A1A;
+    --focus:         #2DE0D9;
     --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -12px rgba(0,0,0,0.5);
   }
   :root[data-theme="light"] {
     color-scheme: light;
-    --bg: #F7F4EE; --card: #FFFFFF; --card-alt: #F3EFE7; --ink: #211E1C; --ink-soft: #5C564C;
-    --muted: #948C7E; --hairline: #E6E0D4; --rule: #211E1C; --buy: #144474; --buy-tint: #D7D5EB;
-    --buy-tint-strong: #CBC9E5; --rent: #BE4737; --rent-tint: #F8C1CB; --rent-tint-strong: #F6ADBB;
-    --error: #B51819; --error-tint: #F9EDED;
-    --focus: #144474;
+    --bg: #FFFDF8; --card: #FFFFFF; --card-alt: #F4F1E9; --ink: #1A1A1A; --ink-soft: #4A4A47;
+    --muted: #726F67; --hairline: #ECE8DD; --rule: #D8FF3E; --buy: #11C5BF; --buy-text: #0A7A76;
+    --buy-tint: #E3FBFA; --buy-tint-strong: #B9F3F0; --rent: #2F6BFF; --rent-text: #2450C2;
+    --rent-tint: #E8EDFF; --rent-tint-strong: #C4D3FF;
+    --highlight: #D8FF3E; --highlight-ink: #1A1A1A; --error: #E63946; --error-tint: #FDEDEE;
+    --focus: #11C5BF;
   }
 
   * { box-sizing: border-box; }
@@ -126,21 +139,74 @@
     outline: 2px solid var(--focus); outline-offset: 2px;
   }
 
-  .layout { display: grid; grid-template-columns: minmax(300px, 400px) 1fr; gap: 24px; align-items: start; }
+  /* ---- Inputs live in a collapsible drawer, not a persistent column.
+     Desktop: docked left, pushes/reflows the report when open. Report
+     auto-expands to fill the space when the drawer is collapsed.
+     Mobile: hidden by default, slides over the report as an overlay. ---- */
+  .layout { display: grid; grid-template-columns: 0px 1fr; gap: 0; align-items: start;
+    transition: grid-template-columns 0.32s cubic-bezier(0.4,0,0.2,1); }
+  .layout.drawer-open { grid-template-columns: 340px 1fr; gap: 24px; }
   .layout > * { min-width: 0; }
-  @media (max-width: 940px) { .layout { grid-template-columns: 1fr; } }
 
-  .panel-sticky { position: sticky; top: 20px; }
-  @media (max-width: 940px) { .panel-sticky { position: static; } }
+  .panel-sticky {
+    position: sticky; top: 20px; max-height: calc(100vh - 40px); overflow: hidden; border-radius: 16px;
+  }
+  .layout.drawer-open .panel-sticky { overflow-y: auto; overflow-x: hidden; }
 
   /* ---- Input panel: all sections always expanded (no accordion), the
      card itself scrolls internally so opening it never changes page length ---- */
   .input-card {
-    background: var(--card); border: 1px solid var(--hairline); border-radius: 10px;
-    padding: 4px 0; box-shadow: var(--shadow);
-    max-height: calc(100vh - 40px); overflow-y: auto;
+    background: var(--card); border-radius: 16px;
+    padding: 4px 0; box-shadow: var(--shadow); width: 340px;
   }
-  @media (max-width: 940px) { .input-card { max-height: none; overflow-y: visible; } }
+  @media (max-width: 720px) {
+    .layout { grid-template-columns: 1fr !important; gap: 0; }
+    .panel-sticky {
+      position: fixed; top: 0; left: 0; height: 100dvh; max-height: none; width: min(360px, 88vw);
+      z-index: 300; transform: translateX(-100%); transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+      box-shadow: 0 20px 60px rgba(26,26,26,0.28); border-radius: 0 20px 20px 0;
+      background: var(--card); overflow-y: auto;
+    }
+    .layout.drawer-open .panel-sticky { transform: translateX(0); }
+    .input-card { width: auto; box-shadow: none; border-radius: 0; }
+  }
+  .drawer-backdrop {
+    position: fixed; inset: 0; background: rgba(26,26,26,0.35); z-index: 290;
+    opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+  }
+  .drawer-backdrop.show { opacity: 1; pointer-events: auto; }
+  .drawer-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 18px 2px;
+  }
+  .drawer-title { font-family: var(--font-display); font-weight: 700; font-size: 15px; margin: 0; }
+  .drawer-close-btn {
+    background: none; border: none; color: var(--muted); font-size: 20px; line-height: 1;
+    cursor: pointer; padding: 4px 6px; border-radius: 6px;
+  }
+  .drawer-close-btn:hover { color: var(--ink); background: var(--card-alt); }
+  .btn-recalculate {
+    position: sticky; bottom: 0; width: calc(100% - 40px); margin: 16px 20px 20px;
+    background: var(--highlight); color: var(--highlight-ink); border: none; border-radius: 10px;
+    padding: 14px; font-size: 15px; font-weight: 700; cursor: pointer; font-family: var(--font-body);
+    box-shadow: 0 -6px 16px -4px rgba(26,26,26,0.12), 0 4px 10px -4px rgba(26,26,26,0.15);
+    transition: transform 0.12s ease, background 0.15s ease;
+  }
+  .btn-recalculate:hover { background: #C7EE2E; }
+  .btn-recalculate:active { transform: scale(0.98); }
+  .edit-inputs-fab {
+    display: none;
+  }
+  @media (max-width: 720px) {
+    .edit-inputs-fab {
+      display: inline-flex; align-items: center; gap: 6px;
+      position: sticky; top: 12px; z-index: 60; margin: 0 0 18px;
+      background: var(--ink); color: var(--bg); border: none; border-radius: 999px;
+      padding: 10px 18px; font-size: 13.5px; font-weight: 600; cursor: pointer;
+      font-family: var(--font-body); box-shadow: var(--shadow);
+    }
+    #toggleDrawerBtn { display: none; }
+  }
   .input-group { padding: 18px 20px; border-bottom: 8px solid var(--bg); }
   .input-group:last-child { border-bottom: none; }
   .input-group > .group-title {
@@ -198,8 +264,8 @@
 
   /* ---- Results ---- */
   .verdict {
-    background: var(--card); border-radius: 10px; padding: 22px 24px; box-shadow: var(--shadow);
-    border: 1px solid var(--hairline); margin-bottom: 18px;
+    background: var(--card); border-radius: 14px; padding: 22px 24px; box-shadow: var(--shadow);
+    margin-bottom: 18px;
   }
   .verdict .eyebrow { font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-soft); margin: 0 0 6px; }
   .verdict h2 {
@@ -212,37 +278,38 @@
   .insights-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
   @media (max-width: 640px) { .insights-row { grid-template-columns: 1fr; } }
   .insight-card {
-    background: var(--card); border: 1px solid var(--hairline); border-radius: 10px;
+    background: var(--card); border-radius: 14px;
     padding: 16px 18px; box-shadow: var(--shadow);
   }
   .insight-label { font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin: 0 0 8px; }
   .insight-text { font-family: var(--font-display); font-size: 16.5px; font-weight: 600; color: var(--ink); margin: 0; line-height: 1.4; }
-  .insight-text strong { color: var(--buy); font-variant-numeric: tabular-nums; }
+  .insight-text strong { color: var(--buy-text); font-variant-numeric: tabular-nums; }
 
   /* KPI cards grouped by Buying / Renting */
   .kpi-groups { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
   @media (max-width: 720px) { .kpi-groups { grid-template-columns: 1fr; } }
   .kpi-group {
-    background: var(--card); border-radius: 12px; padding: 18px 16px 16px;
-    border: 1px solid var(--hairline); border-top: 3px solid transparent; box-shadow: var(--shadow);
+    background: var(--card); border-radius: 16px; padding: 18px 16px 16px;
+    border-top: 3px solid transparent; box-shadow: var(--shadow);
   }
   .kpi-group-buy { border-top-color: var(--buy); }
   .kpi-group-rent { border-top-color: var(--rent); }
-  .kpi-group.is-winner { border-color: currentColor; }
+  .kpi-group-buy.is-winner { box-shadow: 0 2px 4px rgba(26,26,26,0.06), 0 16px 32px -18px var(--buy); }
+  .kpi-group-rent.is-winner { box-shadow: 0 2px 4px rgba(26,26,26,0.06), 0 16px 32px -18px var(--rent); }
   .kpi-group-title {
     font-family: var(--font-display); font-size: 21px; font-weight: 700; margin: 0 0 14px;
     display: flex; align-items: center; flex-wrap: wrap; gap: 8px;
   }
-  .kpi-group-buy .kpi-group-title { color: var(--buy); }
-  .kpi-group-rent .kpi-group-title { color: var(--rent); }
+  .kpi-group-buy .kpi-group-title { color: var(--buy-text); }
+  .kpi-group-rent .kpi-group-title { color: var(--rent-text); }
   .kpi-group-title .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; background: currentColor; }
   .winner-badge {
     font-family: var(--font-body); font-size: 12px; font-weight: 600; letter-spacing: 0.01em;
     border-radius: 999px; padding: 3px 11px 3px 9px; display: inline-flex; align-items: center; gap: 4px;
     white-space: nowrap;
   }
-  .kpi-group-buy .winner-badge { background: var(--buy-tint); color: var(--buy); }
-  .kpi-group-rent .winner-badge { background: var(--rent-tint); color: var(--rent); }
+  .kpi-group-buy .winner-badge { background: var(--buy-tint); color: var(--buy-text); }
+  .kpi-group-rent .winner-badge { background: var(--rent-tint); color: var(--rent-text); }
   @media (prefers-reduced-motion: no-preference) {
     .winner-badge { animation: winnerPop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1); }
   }
@@ -252,19 +319,15 @@
   }
 
   /* ---- Mobile report (≤720px): a read-top-to-bottom personalized report
-     instead of the desktop dashboard. Assumptions move to the very end. ---- */
-  @media (max-width: 720px) {
-    .panel-sticky { order: 2; }
-    #results { order: 1; }
-  }
+     instead of the desktop dashboard. Inputs live in the drawer, not inline. ---- */
   .report-hero { text-align: center; padding: 4px 4px 26px; }
   .report-hero-headline {
     font-family: var(--font-display); font-size: 25px; font-weight: 700; line-height: 1.35;
     margin: 0 0 10px; text-wrap: balance;
   }
   .report-hero-headline strong { font-variant-numeric: tabular-nums; }
-  .report-hero-headline strong.is-buy { color: var(--buy); }
-  .report-hero-headline strong.is-rent { color: var(--rent); }
+  .report-hero-headline strong.is-buy { color: var(--buy-text); }
+  .report-hero-headline strong.is-rent { color: var(--rent-text); }
   .report-hero-sub { font-size: 14px; color: var(--ink-soft); margin: 0; }
 
   .report-section { margin-bottom: 34px; }
@@ -277,8 +340,8 @@
 
   .report-summary-block { margin-bottom: 20px; }
   .report-summary-title { font-family: var(--font-display); font-size: 17px; font-weight: 700; margin: 0 0 8px; }
-  .report-summary-title.is-buy { color: var(--buy); }
-  .report-summary-title.is-rent { color: var(--rent); }
+  .report-summary-title.is-buy { color: var(--buy-text); }
+  .report-summary-title.is-rent { color: var(--rent-text); }
   .report-row {
     display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
     padding: 8px 0; border-top: 1px solid var(--hairline);
@@ -294,8 +357,8 @@
     margin: 20px 0 0; line-height: 1.4;
   }
   .report-diff-line strong { font-variant-numeric: tabular-nums; }
-  .report-diff-line strong.is-buy { color: var(--buy); }
-  .report-diff-line strong.is-rent { color: var(--rent); }
+  .report-diff-line strong.is-buy { color: var(--buy-text); }
+  .report-diff-line strong.is-rent { color: var(--rent-text); }
 
   .report-story-step { padding: 2px 0; }
   .report-story-label { font-family: var(--font-display); font-size: 15px; font-weight: 700; margin: 0 0 8px; }
@@ -306,8 +369,8 @@
     margin-top: 8px; padding-top: 14px; border-top: 2px solid var(--ink);
   }
   .report-row-value-big { font-size: 22px; }
-  .report-row-value-big.is-buy { color: var(--buy); }
-  .report-row-value-big.is-rent { color: var(--rent); }
+  .report-row-value-big.is-buy { color: var(--buy-text); }
+  .report-row-value-big.is-rent { color: var(--rent-text); }
 
   .kpi-group-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   @media (max-width: 460px) { .kpi-group-grid { grid-template-columns: 1fr; } }
@@ -332,7 +395,7 @@
   .chart-details[hidden] { display: none; }
 
   .chart-card {
-    background: var(--card); border: 1px solid var(--hairline); border-radius: 10px;
+    background: var(--card); border-radius: 16px;
     padding: 18px 20px 14px; box-shadow: var(--shadow); margin-bottom: 20px;
   }
   .chart-card h3 { font-family: var(--font-display); font-size: 14.5px; margin: 0 0 2px; }
@@ -389,7 +452,7 @@
     font-size: 11.5px; color: var(--muted); max-width: 70ch;
   }
   .contact-footer { margin: 10px 0 0; }
-  .contact-footer a { color: var(--buy); }
+  .contact-footer a { color: var(--buy-text); }
 
   /* "Download report (PDF)" uses the browser's native print-to-PDF -- no
      extra dependency needed. This tailors what actually ends up on paper. */
@@ -410,7 +473,7 @@
 
   /* ---- Buyer's checklist lead-gen CTA + modal ---- */
   .btn-primary {
-    background: var(--buy); color: #fff; border: none; border-radius: 8px;
+    background: var(--buy); color: var(--highlight-ink); border: none; border-radius: 8px;
     padding: 11px 20px; font-size: 14px; font-weight: 600; cursor: pointer;
     font-family: var(--font-body); display: inline-flex; align-items: center; justify-content: center; gap: 8px;
     transition: filter 0.15s ease, transform 0.1s ease; white-space: nowrap;
@@ -463,11 +526,11 @@
      moment distinct from the persistent dashboard tool. ---- */
   #surveyRoot {
     position: fixed; inset: 0; z-index: 100; overflow-y: auto;
-    background: #F6F1E6; display: flex; flex-direction: column;
+    background: #FFFDF8; display: flex; flex-direction: column;
     font-family: var(--font-body);
   }
-  .survey-progress-track { position: fixed; top: 0; left: 0; right: 0; height: 3px; background: #DED2B8; z-index: 101; }
-  .survey-progress-bar { height: 100%; width: 0%; background: #144474; transition: width 0.35s ease; }
+  .survey-progress-track { position: fixed; top: 0; left: 0; right: 0; height: 3px; background: #EAE6DA; z-index: 101; }
+  .survey-progress-bar { height: 100%; width: 0%; background: #11C5BF; transition: width 0.35s ease; }
   .survey-body { flex: 1; display: flex; align-items: center; justify-content: center; padding: 70px 24px; }
   @media (max-width: 560px) { .survey-body { padding: 56px 18px 30px; } }
   #surveySlide {
@@ -477,70 +540,70 @@
   #surveySlide.survey-slide-wide { max-width: 900px; }
   #surveySlide.enter { opacity: 1; transform: translateY(0); }
   @media (prefers-reduced-motion: reduce) { #surveySlide { transition: none; } }
-  .survey-eyebrow { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: #8A7F68; margin: 0 0 14px; }
-  .survey-context { font-size: 14px; color: #8A7F68; margin: 0 0 10px; line-height: 1.5; }
+  .survey-eyebrow { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: #8C8A83; margin: 0 0 14px; }
+  .survey-context { font-size: 14px; color: #8C8A83; margin: 0 0 10px; line-height: 1.5; }
   .survey-hero-name {
     font-family: 'Sora', sans-serif; font-weight: 700;
-    font-size: clamp(28px, 4.6vw, 42px); line-height: 1.15; color: #2A241C; margin: 0 0 18px; text-wrap: balance; letter-spacing: -0.01em;
+    font-size: clamp(28px, 4.6vw, 42px); line-height: 1.15; color: #1A1A1A; margin: 0 0 18px; text-wrap: balance; letter-spacing: -0.01em;
   }
   .survey-value-prop {
-    font-size: 16.5px; line-height: 1.6; color: #4A4436; max-width: 58ch; margin: 0;
+    font-size: 16.5px; line-height: 1.6; color: #43413C; max-width: 58ch; margin: 0;
   }
-  .survey-hero-divider { width: 44px; height: 3px; background: #144474; border-radius: 2px; margin: 30px 0 34px; }
+  .survey-hero-divider { width: 44px; height: 3px; background: #11C5BF; border-radius: 2px; margin: 30px 0 34px; }
   .survey-h {
     font-family: 'Sora', sans-serif; font-weight: 600;
-    font-size: clamp(24px, 3.4vw, 32px); line-height: 1.22; color: #2A241C; margin: 0 0 26px; text-wrap: balance;
+    font-size: clamp(24px, 3.4vw, 32px); line-height: 1.22; color: #1A1A1A; margin: 0 0 26px; text-wrap: balance;
   }
   .survey-input-row {
-    display: flex; align-items: baseline; gap: 10px; border-bottom: 2px solid #DED2B8;
+    display: flex; align-items: baseline; gap: 10px; border-bottom: 2px solid #EAE6DA;
     padding-bottom: 10px; margin-bottom: 10px;
   }
   .survey-input-row input {
     flex: 1; border: none; background: transparent; font-family: 'Sora', sans-serif;
-    font-size: 28px; font-weight: 600; color: #2A241C; padding: 4px 0; font-variant-numeric: tabular-nums;
+    font-size: 28px; font-weight: 600; color: #1A1A1A; padding: 4px 0; font-variant-numeric: tabular-nums;
   }
   .survey-input-row input:focus { outline: none; }
-  .survey-input-row input::placeholder { color: #8A7F68; opacity: 0.6; }
-  .survey-unit { font-size: 15px; color: #8A7F68; white-space: nowrap; }
+  .survey-input-row input::placeholder { color: #8C8A83; opacity: 0.6; }
+  .survey-unit { font-size: 15px; color: #8C8A83; white-space: nowrap; }
   .survey-unit.highlight {
-    color: #144474; font-weight: 700; background: #D7D5EB;
+    color: #11C5BF; font-weight: 700; background: #E3FBFA;
     padding: 4px 11px; border-radius: 999px; font-size: 14px;
   }
-  .survey-note { font-size: 13px; color: #8A7F68; margin: 0 0 26px; font-variant-numeric: tabular-nums; line-height: 1.5; transition: color 0.15s ease; }
-  .survey-note-confirm { color: #144474; font-weight: 600; }
-  .survey-input-row input:disabled { opacity: 1; color: inherit; -webkit-text-fill-color: #144474; }
+  .survey-note { font-size: 13px; color: #8C8A83; margin: 0 0 26px; font-variant-numeric: tabular-nums; line-height: 1.5; transition: color 0.15s ease; }
+  .survey-note-confirm { color: #11C5BF; font-weight: 600; }
+  .survey-input-row input:disabled { opacity: 1; color: inherit; -webkit-text-fill-color: #11C5BF; }
   .survey-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 22px; margin-top: 4px; }
   .survey-btn {
-    background: #144474; color: #fff; border: none; border-radius: 8px; padding: 13px 26px;
-    font-size: 15px; font-weight: 600; cursor: pointer; font-family: var(--font-body);
+    background: #D8FF3E; color: #1A1A1A; border: none; border-radius: 8px; padding: 13px 26px;
+    font-size: 15px; font-weight: 700; cursor: pointer; font-family: var(--font-body);
     transition: transform 0.12s ease, background 0.15s ease;
   }
-  .survey-btn:hover { background: #10355A; }
+  .survey-btn:hover { background: #C7EE2E; }
   .survey-btn:active { transform: scale(0.97); }
-  .survey-btn:focus-visible { outline: 2px solid #144474; outline-offset: 2px; }
+  .survey-btn:focus-visible { outline: 2px solid #1A1A1A; outline-offset: 2px; }
   .survey-skip {
-    background: none; border: none; color: #8A7F68; text-decoration: underline; cursor: pointer;
+    background: none; border: none; color: #8C8A83; text-decoration: underline; cursor: pointer;
     font-size: 13.5px; font-family: var(--font-body); padding: 0;
   }
   .survey-back {
-    position: absolute; top: -44px; left: 0; background: none; border: none; color: #8A7F68;
+    position: absolute; top: -44px; left: 0; background: none; border: none; color: #8C8A83;
     font-size: 13px; cursor: pointer; font-family: var(--font-body); padding: 4px 0;
   }
   .survey-choice-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
   .survey-choice {
-    text-align: left; background: #FFFDF8; border: 1.5px solid #DED2B8; border-radius: 10px;
-    padding: 16px 18px; font-size: 15.5px; color: #2A241C; cursor: pointer; font-family: var(--font-body);
+    text-align: left; background: #FFFFFF; border: 1.5px solid #EAE6DA; border-radius: 10px;
+    padding: 16px 18px; font-size: 15.5px; color: #1A1A1A; cursor: pointer; font-family: var(--font-body);
     transition: border-color 0.15s ease, transform 0.1s ease, background 0.15s ease;
   }
-  .survey-choice:hover { border-color: #144474; background: #D7D5EB; }
+  .survey-choice:hover { border-color: #11C5BF; background: #E3FBFA; }
   .survey-choice:active { transform: scale(0.99); }
-  .survey-choice:focus-visible { outline: 2px solid #144474; outline-offset: 2px; }
-  .survey-choice.is-current { border-color: #144474; background: #D7D5EB; }
+  .survey-choice:focus-visible { outline: 2px solid #11C5BF; outline-offset: 2px; }
+  .survey-choice.is-current { border-color: #11C5BF; background: #E3FBFA; }
   .survey-choice:disabled { cursor: default; }
   .survey-choice:disabled:not(.is-current) { opacity: 0.45; }
   .survey-spinner { display: flex; gap: 8px; }
   .survey-spinner span {
-    width: 10px; height: 10px; border-radius: 50%; background: #144474;
+    width: 10px; height: 10px; border-radius: 50%; background: #11C5BF;
     animation: surveyDotPulse 1s ease-in-out infinite;
   }
   .survey-spinner span:nth-child(2) { animation-delay: 0.15s; }
@@ -600,16 +663,31 @@
         <svg viewBox="0 0 24 24" width="14" height="14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 12a8 8 0 1 1-2.34-5.66M20 4v5h-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         Redo the survey
       </button>
+      <button class="theme-toggle" id="toggleDrawerBtn" type="button">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 6h16M4 12h10M4 18h13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <span id="toggleDrawerBtnLabel">Edit inputs</span>
+      </button>
     </div>
   </header>
 
+  <button class="edit-inputs-fab" id="editInputsFab" type="button">
+    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 6h16M4 12h10M4 18h13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    Edit inputs
+  </button>
+
   <div class="layout">
-    <div class="panel-sticky">
+    <aside class="panel-sticky" id="inputDrawer">
+      <div class="drawer-header">
+        <p class="drawer-title">Edit inputs</p>
+        <button class="drawer-close-btn" id="drawerCloseBtn" type="button" aria-label="Close">✕</button>
+      </div>
       <div class="input-card" id="inputCard"></div>
-    </div>
+    </aside>
 
     <div id="results"></div>
   </div>
+
+  <div class="drawer-backdrop" id="drawerBackdrop"></div>
 
   <footer class="disclaimer">
     All figures are estimates for illustration only, based on the assumptions you enter — not financial, tax, or mortgage advice.
@@ -826,39 +904,39 @@
   // INPUT PANEL — build once, wire events
   // ---------------------------------------------------------------------
   var FIELD_DEFS = [
-    { key: "price", label: "House purchase price", unit: "€", step: 5000, group: "core_a", placeholder: "e.g. 450.000" },
-    { key: "mortgageRatePct", label: "Mortgage interest rate", unit: "%/yr", step: 0.05, group: "core_b",
-      caption: "Netherlands average, 10-year fixed rate (Aug 2026). Varies by lender, NHG eligibility, and energy label." },
-    { key: "loanTermYears", label: "Loan term", unit: "years", step: 1, group: "core_b" },
-    { key: "holdingYears", label: "Holding period", unit: "years", step: 1, group: "core_b",
-      infoCaption: "How many years do you expect to own this property before selling?" },
-    { key: "holdingCostInflationPct", label: "Holding cost inflation", unit: "%/yr", step: 0.1, group: "core_b" },
-    { key: "monthlyRent", label: "Equivalent monthly rent", unit: "€/mo", step: 50, group: "core2" },
-    { key: "occupants", label: "Number of occupants", unit: "", step: 1, group: "core2" },
-    { key: "rentGrowthPct", label: "Rent growth", unit: "%/yr", step: 0.1, group: "core2" },
-
-    { key: "notaryTransfer", label: "Notary — transfer deed", unit: "€", step: 50, group: "onetime",
+    { key: "price", label: "House purchase price", unit: "€", step: 5000, group: "property", placeholder: "e.g. 450.000" },
+    { key: "notaryTransfer", label: "Notary — transfer deed", unit: "€", step: 50, group: "property",
       caption: "Mandatory — Dutch law requires a notary to execute every property transfer." },
-    { key: "notaryMortgage", label: "Notary — mortgage deed", unit: "€", step: 50, group: "onetime",
+    { key: "notaryMortgage", label: "Notary — mortgage deed", unit: "€", step: 50, group: "property",
       caption: "Mandatory if financing with a mortgage; not needed for an all-cash purchase." },
-    { key: "advisorFee", label: "Mortgage advisor fee", unit: "€", step: 50, group: "onetime",
+    { key: "advisorFee", label: "Mortgage advisor fee", unit: "€", step: 50, group: "property",
       caption: "Optional — an execution-only mortgage without an advisor is possible, though most buyers use one." },
-    { key: "valuation", label: "Bank valuation", unit: "€", step: 50, group: "onetime",
+    { key: "valuation", label: "Bank valuation", unit: "€", step: 50, group: "property",
       caption: "Mandatory — lenders require an independent (NWWI-validated) valuation report before approving a mortgage." },
-    { key: "furniture", label: "Furniture & interior setup", unit: "€", step: 100, group: "onetime",
+    { key: "furniture", label: "Furniture & interior setup", unit: "€", step: 100, group: "property",
       caption: "Optional — a personal budget, not a real-estate transaction cost." },
-    { key: "sellingCostPct", label: "Selling cost", unit: "% of sale price", step: 0.1, group: "onetime" },
-
-    { key: "ozbAnnual", label: "Annual property tax", unit: "€/yr", step: 10, group: "holding",
+    { key: "sellingCostPct", label: "Selling cost", unit: "% of sale price", step: 0.1, group: "property" },
+    { key: "ozbAnnual", label: "Annual property tax", unit: "€/yr", step: 10, group: "property",
       caption: "WOZ value × tax rate — a rough estimate; check your municipality's actual WOZ assessment for the exact amount." },
-    { key: "vveFee", label: "VVE (owners' association) fee", unit: "€/mo", step: 10, group: "holding" },
-    { key: "insuranceAnnual", label: "Home insurance", unit: "€/yr", step: 25, group: "holding" },
-    { key: "maintenancePct", label: "Maintenance budget", unit: "% of price/yr", step: 0.1, group: "holding" },
-    { key: "groundLease", label: "Ground lease (erfpacht)", unit: "€/mo", step: 10, group: "holding" },
+    { key: "vveFee", label: "VVE (owners' association) fee", unit: "€/mo", step: 10, group: "property" },
+    { key: "insuranceAnnual", label: "Home insurance", unit: "€/yr", step: 25, group: "property" },
+    { key: "maintenancePct", label: "Maintenance budget", unit: "% of price/yr", step: 0.1, group: "property" },
+    { key: "groundLease", label: "Ground lease (erfpacht)", unit: "€/mo", step: 10, group: "property" },
 
-    { key: "houseGrowthPct", label: "House price growth", unit: "%/yr", step: 0.1, group: "growth",
+    { key: "mortgageRatePct", label: "Mortgage interest rate", unit: "%/yr", step: 0.05, group: "mortgage",
+      caption: "Netherlands average, 10-year fixed rate (Aug 2026). Varies by lender, NHG eligibility, and energy label." },
+    { key: "loanTermYears", label: "Loan term", unit: "years", step: 1, group: "mortgage" },
+
+    { key: "monthlyRent", label: "Equivalent monthly rent", unit: "€/mo", step: 50, group: "renting" },
+    { key: "occupants", label: "Number of occupants", unit: "", step: 1, group: "renting" },
+    { key: "rentGrowthPct", label: "Rent growth", unit: "%/yr", step: 0.1, group: "renting" },
+
+    { key: "holdingYears", label: "Holding period", unit: "years", step: 1, group: "timeline",
+      infoCaption: "How many years do you expect to own this property before selling?" },
+    { key: "holdingCostInflationPct", label: "Holding cost inflation", unit: "%/yr", step: 0.1, group: "timeline" },
+    { key: "houseGrowthPct", label: "House price growth", unit: "%/yr", step: 0.1, group: "timeline",
       caption: "Based on 2026 outlooks from ABN AMRO, Rabobank, and ING (roughly 1.5–3.1%/yr) — a rough middle estimate." },
-    { key: "investmentReturnPct", label: "Investment return (alt. use of capital)", unit: "%/yr", step: 0.1, group: "growth" }
+    { key: "investmentReturnPct", label: "Investment return (alt. use of capital)", unit: "%/yr", step: 0.1, group: "timeline" }
   ];
 
   function fieldHTML(def) {
@@ -960,23 +1038,9 @@
   function buildInputPanel() {
     var html = '';
     html += '<div class="input-group core">' +
-      '<div class="group-title">Property &amp; financing</div>' +
-      '<div class="group-body">' + fieldsFor("core_a") + downPaymentFieldHTML() + fieldsFor("core_b") + '</div>' +
-      '</div>';
-
-    html += '<div class="input-group core">' +
-      '<div class="group-title">Renting alternative</div>' +
-      '<div class="group-body">' + fieldsFor("core2") + '</div>' +
-      '</div>';
-
-    html += '<div class="input-group">' +
-      '<div class="group-title">Growth &amp; investment assumptions</div>' +
-      '<div class="group-body">' + fieldsFor("growth") + '</div>' +
-      '</div>';
-
-    html += '<div class="input-group">' +
-      '<div class="group-title">One-time buying &amp; selling costs</div>' +
+      '<div class="group-title">Property</div>' +
       '<div class="group-body">' +
+        fieldHTMLByKey("price") +
         transferTaxFieldHTML() +
         fieldHTMLByKey("notaryTransfer") +
         fieldHTMLByKey("notaryMortgage") +
@@ -987,20 +1051,36 @@
         fieldHTMLByKey("furniture") +
         fieldHTMLByKey("sellingCostPct") +
         '<div class="computed-note" id="note_onetime"></div>' +
+        fieldHTMLByKey("ozbAnnual") +
+        fieldHTMLByKey("vveFee") +
+        fieldHTMLByKey("insuranceAnnual") +
+        fieldHTMLByKey("maintenancePct") +
+        fieldHTMLByKey("groundLease") +
+        '<div class="computed-note" id="note_holding"></div>' +
       '</div>' +
       '</div>';
 
-    html += '<div class="input-group">' +
-      '<div class="group-title">Monthly ownership costs</div>' +
-      '<div class="group-body">' +
-      fieldsFor("holding") +
-      '<div class="computed-note" id="note_holding"></div>' +
-      '</div></div>';
+    html += '<div class="input-group core">' +
+      '<div class="group-title">Mortgage</div>' +
+      '<div class="group-body">' + fieldHTMLByKey("mortgageRatePct") + fieldHTMLByKey("loanTermYears") + downPaymentFieldHTML() + '</div>' +
+      '</div>';
+
+    html += '<div class="input-group core">' +
+      '<div class="group-title">Renting</div>' +
+      '<div class="group-body">' + fieldsFor("renting") + '</div>' +
+      '</div>';
 
     html += '<div class="input-group">' +
-      '<div class="group-title">Tax treatment (NL mortgage interest deduction)</div>' +
-      '<div class="group-body"><div id="taxEstimateBox"></div></div>' +
+      '<div class="group-title">Timeline</div>' +
+      '<div class="group-body">' + fieldsFor("timeline") + '</div>' +
       '</div>';
+
+    html += '<div class="input-group">' +
+      '<div class="group-title">Assumptions</div>' +
+      '<div class="group-body"><p class="field-caption" style="margin-bottom:2px">Tax treatment (NL mortgage interest deduction) — fixed, not user-editable.</p><div id="taxEstimateBox"></div></div>' +
+      '</div>';
+
+    html += '<button type="button" class="btn-recalculate" id="recalculateBtn">Recalculate</button>';
 
     document.getElementById("inputCard").innerHTML = html;
 
@@ -1008,21 +1088,19 @@
       document.getElementById("f_" + def.key).addEventListener("input", function (e) {
         var v = parseFloat(e.target.value);
         state[def.key] = isNaN(v) ? (def.key === "price" ? null : 0) : v;
-        refresh();
       });
     });
-    // Down payment: € and % fields kept in sync both ways
+    // Down payment: € and % fields kept in sync both ways (display-only, not a recalculation)
     document.getElementById("f_downPaymentEUR").addEventListener("input", function (e) {
       var v = parseFloat(e.target.value);
       state.downPayment = isNaN(v) ? 0 : v;
-      refresh();
+      syncDownPaymentPctDisplay();
     });
     document.getElementById("f_downPaymentPct").addEventListener("input", function (e) {
       var v = parseFloat(e.target.value);
       var pct = isNaN(v) ? 0 : v;
       state.downPayment = state.price ? (pct / 100) * state.price : 0;
       document.getElementById("f_downPaymentEUR").value = state.downPayment;
-      refresh();
     });
 
     wireInfoIcons(document.getElementById("inputCard"));
@@ -1031,11 +1109,9 @@
     document.getElementById("f_transferTaxMode").addEventListener("change", function (e) {
       state.transferTaxMode = e.target.value;
       document.getElementById("f_transferTaxCustom").style.display = state.transferTaxMode === "custom" ? "block" : "none";
-      refresh();
     });
     document.getElementById("f_transferTaxCustom").addEventListener("input", function (e) {
       state.transferTaxCustomPct = parseFloat(e.target.value) || 0;
-      refresh();
     });
 
     // Buyer's agent: yes/no + € and % fields kept in sync both ways
@@ -1043,20 +1119,18 @@
       radio.addEventListener("change", function (e) {
         state.agentMode = e.target.value;
         document.getElementById("agentFeeAmountRow").style.display = state.agentMode === "no" ? "none" : "grid";
-        refresh();
       });
     });
     document.getElementById("f_agentFeeEUR").addEventListener("input", function (e) {
       var v = parseFloat(e.target.value);
       state.agentFee = isNaN(v) ? 0 : v;
-      refresh();
+      syncAgentFeePctDisplay();
     });
     document.getElementById("f_agentFeePct").addEventListener("input", function (e) {
       var v = parseFloat(e.target.value);
       var pct = isNaN(v) ? 0 : v;
       state.agentFee = state.price ? (pct / 100) * state.price : 0;
       document.getElementById("f_agentFeeEUR").value = state.agentFee;
-      refresh();
     });
 
     // Structural/technical survey: yes/no + cost
@@ -1064,12 +1138,16 @@
       radio.addEventListener("change", function (e) {
         state.surveyMode = e.target.value;
         document.getElementById("f_survey").style.display = state.surveyMode === "no" ? "none" : "block";
-        refresh();
       });
     });
     document.getElementById("f_survey").addEventListener("input", function (e) {
       state.survey = parseFloat(e.target.value) || 0;
+    });
+
+    document.getElementById("recalculateBtn").addEventListener("click", function () {
       refresh();
+      if (mobileReportMQ.matches) setDrawerOpen(false);
+      document.getElementById("results").scrollIntoView({ behavior: "smooth", block: "start" });
     });
   }
 
@@ -1345,8 +1423,8 @@
     return '<div class="chart-card cta-card" id="checklistCta">' +
       '<div class="cta-icon">' +
         '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">' +
-          '<path d="M6 2h8l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" stroke="var(--buy)" stroke-width="1.6" stroke-linejoin="round"/>' +
-          '<path d="M12 10.5v7m0 0-2.75-2.75M12 17.5l2.75-2.75" stroke="var(--buy)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>' +
+          '<path d="M6 2h8l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2z" stroke="var(--buy-text)" stroke-width="1.6" stroke-linejoin="round"/>' +
+          '<path d="M12 10.5v7m0 0-2.75-2.75M12 17.5l2.75-2.75" stroke="var(--buy-text)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>' +
         '</svg>' +
       '</div>' +
       '<div class="cta-content">' +
@@ -1585,6 +1663,26 @@
   });
 
   // ---------------------------------------------------------------------
+  // INPUT DRAWER — docked + collapsible on desktop, an overlay on mobile.
+  // ---------------------------------------------------------------------
+  var drawerOpen = false;
+
+  function setDrawerOpen(open) {
+    drawerOpen = open;
+    document.querySelector(".layout").classList.toggle("drawer-open", open);
+    document.getElementById("drawerBackdrop").classList.toggle("show", open && mobileReportMQ.matches);
+    var label = document.getElementById("toggleDrawerBtnLabel");
+    if (label) label.textContent = open ? "Hide inputs" : "Edit inputs";
+  }
+
+  function toggleDrawer() { setDrawerOpen(!drawerOpen); }
+
+  document.getElementById("toggleDrawerBtn").addEventListener("click", toggleDrawer);
+  document.getElementById("editInputsFab").addEventListener("click", toggleDrawer);
+  document.getElementById("drawerCloseBtn").addEventListener("click", function () { setDrawerOpen(false); });
+  document.getElementById("drawerBackdrop").addEventListener("click", function () { setDrawerOpen(false); });
+
+  // ---------------------------------------------------------------------
   // BUYER'S CHECKLIST LEAD-GEN CTA + MODAL
   // ---------------------------------------------------------------------
   var checklistState = { submitting: false, ctaViewed: false };
@@ -1782,13 +1880,16 @@
       state.ozbAnnual = Math.round((state.price || 0) * 0.00041);
     }
     buildInputPanel();
+    setDrawerOpen(!mobileReportMQ.matches);
     refresh();
   }
 
   // Re-render if the viewport crosses the mobile-report breakpoint (e.g. a
   // tablet rotation or a resized browser window), not just on input changes.
-  mobileReportMQ.addEventListener("change", function () {
-    if (!document.getElementById("dashboardRoot").classList.contains("hidden")) refresh();
+  mobileReportMQ.addEventListener("change", function (e) {
+    if (document.getElementById("dashboardRoot").classList.contains("hidden")) return;
+    setDrawerOpen(!e.matches);
+    refresh();
   });
 
   // ---------------------------------------------------------------------
